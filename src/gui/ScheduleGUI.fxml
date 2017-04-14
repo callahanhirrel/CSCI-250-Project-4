@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.111">
+  <tabs>
+    <Tab text="Home">
+         <content>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <VBox prefHeight="367.0" prefWidth="174.0">
+                     <children>
+                        <Label text="Collaborators:" translateX="5.0" translateY="10.0" underline="true">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="321.0" prefWidth="166.0" translateX="5.0" translateY="20.0" />
+                     </children>
+                  </VBox>
+                  <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="367.0" prefWidth="386.0" translateX="25.0">
+                     <children>
+                        <HBox prefHeight="32.0" prefWidth="426.0" translateY="10.0">
+                           <children>
+                              <Label text="Date:" translateY="3.5" underline="true">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Label>
+                              <DatePicker prefHeight="27.0" prefWidth="178.0" translateX="5.0" />
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="32.0" prefWidth="426.0" translateY="15.0">
+                           <children>
+                              <Label text="Time:" translateY="3.5" underline="true">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Label>
+                              <ChoiceBox prefHeight="27.0" prefWidth="48.0" translateX="10.0" />
+                              <Label text=":" translateX="15.0">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <ChoiceBox prefHeight="27.0" prefWidth="48.0" translateX="20.0" />
+                              <ChoiceBox prefHeight="27.0" prefWidth="48.0" translateX="25.0" />
+                           </children>
+                        </HBox>
+                        <Pane prefHeight="29.0" prefWidth="386.0" translateY="25.0">
+                           <children>
+                              <Button mnemonicParsing="false" text="Check Schedules" />
+                              <Button layoutX="152.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="82.0" text="Reset" />
+                           </children>
+                        </Pane>
+                        <ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="234.0" prefWidth="260.0" translateY="35.0" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+         </content></Tab>
+      <Tab text="Schedule a Meeting">
+         <content>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <ScrollPane layoutX="12.0" layoutY="120.0" prefHeight="236.0" prefWidth="573.0">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
+                    </content>
+                  </ScrollPane>
+                  <Button layoutX="14.0" layoutY="74.0" mnemonicParsing="false" text="Get Recommendations" />
+                  <Label layoutX="12.0" layoutY="14.0" prefHeight="50.0" prefWidth="553.0" text="Click the button below and this application will generate recommendations for meeting times" wrapText="true">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+         </content>
+      </Tab>
+    <Tab text="My Schedule">
+         <content>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <TableView minHeight="-Infinity" minWidth="-Infinity" prefHeight="285.0" prefWidth="600.0">
+                    <columns>
+                      <TableColumn prefWidth="69.0" text="TIME" />
+                      <TableColumn prefWidth="74.0" text="Monday" />
+                        <TableColumn prefWidth="77.0" text="Tuesday" />
+                        <TableColumn text="Wednesday" />
+                        <TableColumn prefWidth="75.0" text="Thursday" />
+                        <TableColumn prefWidth="75.0" text="Friday" />
+                        <TableColumn prefWidth="75.0" text="Saturday" />
+                        <TableColumn prefWidth="75.0" text="Sunday" />
+                    </columns>
+                  </TableView>
+                  <Button layoutX="14.0" layoutY="305.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="125.0" text="Update Schedule" />
+               </children>
+            </AnchorPane>
+         </content></Tab>
+      <Tab text="Connect with a Peer">
+         <content>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <HBox prefHeight="56.0" prefWidth="600.0">
+                     <children>
+                        <Label text="IP Address of Collaborator:" translateX="5.0" translateY="10.0" underline="true">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="ip" translateX="10.0" translateY="10.0" />
+                        <Button fx:id="connect" alignment="CENTER" mnemonicParsing="false" onAction="#connect" prefHeight="26.0" prefWidth="77.0" text="Connect" textAlignment="CENTER" translateX="15.0" translateY="10.0" wrapText="true" />
+                     </children>
+                  </HBox>
+                  <Label fx:id="message" layoutX="10.0" layoutY="56.0" prefHeight="19.0" prefWidth="580.0" text=" You are now connected with . . . . ">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+         </content>
+      </Tab>
+  </tabs>
+</TabPane>

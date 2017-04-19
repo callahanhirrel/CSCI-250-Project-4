@@ -1,6 +1,7 @@
 package gui;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import javafx.application.Platform;
@@ -11,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 import network.Client;
 import network.NetworkData;
 import network.Server;
@@ -18,6 +20,7 @@ import network.Server;
 public class ScheduleController {
 
 	// FXML Objects under "Home" tab go here:
+	@FXML VBox peerList;
 
 	// FXML Objects under "Schedule a Meeting" tab go here:
 
@@ -58,6 +61,7 @@ public class ScheduleController {
 	private void unpackData(NetworkData data) {
 		if (data.getTag().equals(NetworkData.CONNECT_TAG)) {
 			confirmConnection(data);
+			showPeers();
 		} else if (data.getTag().equals(NetworkData.MEETING_TAG)) {
 			// TODO
 		} else if (data.getTag().equals(NetworkData.SCHEDULE_TAG)) {
@@ -72,6 +76,16 @@ public class ScheduleController {
 		} catch (InterruptedException e) {
 			Platform.runLater(() -> displayError(e.getMessage()));
 			e.printStackTrace();
+		}
+	}
+
+	private void showPeers() {
+		HashMap<String, String> peers = client.getPeers();
+		peerList.getChildren().clear();
+		for (String peer : peers.keySet()) {
+			Label label = new Label();
+			label.setText(peer);
+			peerList.getChildren().add(label);
 		}
 	}
 

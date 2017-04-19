@@ -6,6 +6,8 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import gui.ScheduleController;
+
 public class Server {
 
 	private ServerSocket accepter;
@@ -40,7 +42,7 @@ public class Server {
 				System.out.println("Server: Received [" + justReceived.getTag() + "]");
 				unpackData(justReceived);
 			} catch (IOException | ClassNotFoundException e) {
-				// TODO Auto-generated catch block
+				ScheduleController.displayError(e.getMessage());
 				e.printStackTrace();
 			}
 		}

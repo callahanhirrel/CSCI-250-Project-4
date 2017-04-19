@@ -43,7 +43,7 @@ public class UpdateController {
 	List<String> perPicker = Arrays.asList("AM", "PM");
 	
 	@FXML
-	void initialize() throws ClassNotFoundException {
+	public void initialize() throws ClassNotFoundException {
 		for (String d: dayPicker) {
 			day.getItems().add(d);
 		}
@@ -62,14 +62,14 @@ public class UpdateController {
 		db.init();
 	}
 	
-	@FXML
-	void ableDayPicker() {
-		if (per.getSelectionModel().isSelected(0)) {
-			hourPicker = helper.am();
-		} else {
-			hourPicker = helper.pm();
-		}
-	}
+//	@FXML
+//	void ableDayPicker() {
+//		if (per.getSelectionModel().isSelected(0)) {
+//			hourPicker = helper.am();
+//		} else {
+//			hourPicker = helper.pm();
+//		}
+//	}
 	
 	@FXML
 	void addSchedule() throws SQLException {

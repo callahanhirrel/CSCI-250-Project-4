@@ -14,10 +14,10 @@ public class Server {
 	public Server() throws IOException {
 		accepter = new ServerSocket(PORT);
 		System.out.println("Server: IP Address: " + accepter.getInetAddress() + " (" + PORT + ")");
-		System.out.println("Server: Now listening");
 	}
 
 	public void listen() throws IOException {
+		System.out.println("Server: Now listening");
 		for (;;) {
 			Socket socket = accepter.accept();
 			SocketCommunicationThread communicator = new SocketCommunicationThread(socket);

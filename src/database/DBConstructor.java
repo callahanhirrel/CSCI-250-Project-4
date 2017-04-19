@@ -4,37 +4,31 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-//import java.util.ArrayList;
+import java.util.ArrayList;
 
 public class DBConstructor {
 	
-	/*Initialize database*/
+	String[] daysOfTheWeek = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
+	
 	public void init() throws ClassNotFoundException{
 		Class.forName("org.sqlite.JDBC");
 	}
 	
-	/*Connect to database project4*/
 	public Connection connectDB() throws SQLException {
 		Connection con = DriverManager.getConnection("jdbc:sqlite:project4.db");
 		return con;
 	}
 	
-	/*Create a sql Statement*/
 	public Statement editDB(Connection con) throws SQLException {
 		Statement stat = con.createStatement();
 		return stat;
 	}
 	
-	/*Close connection*/
 	public void closeDB(Connection con) throws SQLException {
 		con.close();
 	}
 	
-	/*Create a Table*/
-	public void createTable(Statement stat, String tablename, String[] fields, String[] types) throws SQLException {
-		stat.execute("drop table if exists"
-				+ " "
-				+ tablename);
+	public void createTable(Statement stat, String tablename, ArrayList<String> fields, ArrayList<String> types) throws SQLException {
 		stat.execute("create "
 				+ "table "
 				+ tablename
@@ -44,45 +38,47 @@ public class DBConstructor {
 				+ ")");
 	}
 	
-	/*Generate fields*/
-	public String buildFields(String[] fields, String[] types) {
+	public String buildFields(ArrayList<String> fields, ArrayList<String> types) {
 		String text = new String();
 		
-		for (int i = 0; i < fields.length; i++) {
-			if (i == fields.length - 1) {
-				text = text + fields[i] + " " + types[i];
+		for (int i = 0; i < fields.size(); i++) {
+			if (i == fields.size() - 1) {
+				text = text + fields.get(i) + " " + types.get(i);
 			} else {
-				text = text + fields[i] + " " + types[i] + ", ";
+				text = text + fields.get(i) + " " + types.get(i) + ", ";
 			}
 		}
 		
 		return text;
 	}
 	
-	/*Insert data to the Table*/
-	public void insertData(Statement stat, String tablename, String[] data) throws SQLException { 
-		stat.execute("insert into"
-				+ " "
-				+ tablename
-				+ " "
-				+ "values("
-				+ buildData(data)
-				+ ")");
-	}
-	
-	/*Generate data*/
-	public String buildData(String[] data) {
-		String text = new String();
-		
-		for (int i = 0; i < data.length; i++) {
-			if (i == data.length - 1) {
-				text = text + data[i];
-			} else {
-				text = text + data[i] + ", ";
+	public void createScheduleTables() throws Exception {
+		Connection con = connectDB();
+		for (String day : daysOfTheWeek) {
+			Statement stat = editDB(con);
+			try {
+				stat.execute("CREATE TABLE " + day + " ( `username` TEXT, `hour8` INTEGER, `hour9` INTEGER, `hour10` INTEGER, `hour11` INTEGER, `hour12` INTEGER, `hour13` INTEGER, `hour14` INTEGER, `hour15` INTEGER, `hour16` INTEGER, `hour17` INTEGER, `hour18` INTEGER, `hour19` INTEGER, `hour20` INTEGER, `hour21` INTEGER, `hour22` INTEGER )");
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new Exception("Failed to create schedule tables.");
 			}
 		}
-		
-		return text;
+		con.close();
 	}
+	
+	public void addNameToDatabase(String name) throws Exception {
+		Connection con = connectDB();
+		for (String day : daysOfTheWeek) {
+			Statement stat = editDB(con);
+			try {
+				stat.execute("INSERT INTO " + day + "(name,hour8,hour9,hour10,hour11,hour12,hour13,hour14,hour15,hour16,hour17,hour18,hour19,hour20,hour21,hour22) VALUES (" + name + ",0,0,0,0,0,0,0,0,0,0,0,0,0,0,0");
+			}
+			catch (SQLException e) {
+				e.printStackTrace();
+				throw new Exception("Failed to add name to the tables.");
+			}
+		}
+	}
+	
 	
 }

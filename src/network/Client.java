@@ -16,6 +16,10 @@ public class Client {
 		peers = new HashMap<>();
 	}
 
+	public HashMap<String, String> getPeers() {
+		return this.peers;
+	}
+
 	public String confirmConnection(NetworkData data, String ip) throws InterruptedException {
 		String peerUsername = data.getUsername();
 		peers.put(peerUsername, ip);

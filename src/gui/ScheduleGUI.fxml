@@ -98,14 +98,12 @@
                <children>
                   <TableView minHeight="-Infinity" minWidth="-Infinity" prefHeight="285.0" prefWidth="600.0">
                     <columns>
-                      <TableColumn prefWidth="69.0" text="TIME" />
-                      <TableColumn prefWidth="74.0" text="Monday" />
-                        <TableColumn prefWidth="77.0" text="Tuesday" />
-                        <TableColumn text="Wednesday" />
-                        <TableColumn prefWidth="75.0" text="Thursday" />
-                        <TableColumn prefWidth="75.0" text="Friday" />
-                        <TableColumn prefWidth="75.0" text="Saturday" />
-                        <TableColumn prefWidth="75.0" text="Sunday" />
+                      <TableColumn prefWidth="84.0" text="TIME" />
+                      <TableColumn prefWidth="84.0" text="Monday" />
+                        <TableColumn prefWidth="96.0" text="Tuesday" />
+                        <TableColumn prefWidth="107.0" text="Wednesday" />
+                        <TableColumn prefWidth="109.0" text="Thursday" />
+                        <TableColumn prefWidth="119.0" text="Friday" />
                     </columns>
                   </TableView>
                   <Button layoutX="14.0" layoutY="305.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="125.0" text="Update Schedule" />

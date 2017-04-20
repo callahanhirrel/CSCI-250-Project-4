@@ -42,13 +42,15 @@ public class DBConstructorTest {
 	@Test
 	public void test3() {
 		String[] data = {"1"};
-		assertEquals("1", db.buildData(data));
+		List<?> ls = Arrays.asList(data);
+		assertEquals("1", db.buildData(ls));
 	}
 	
 	@Test
 	public void test4() {
 		String[] data = {"1", "'DataBase'"};
-		assertEquals("1, 'DataBase'", db.buildData(data));
+		List<?> ls = Arrays.asList(data);
+		assertEquals("1, 'DataBase'", db.buildData(ls));
 	}
 	
 //	@Test
@@ -74,6 +76,7 @@ public class DBConstructorTest {
 	public void test6() {
 		String[] list = {"1", "2", "3"};
 		List<?> ls = Arrays.asList(list);
+//		String[] x = (String[]) ls.toArray();
 		System.out.println(ls);
 	}
 	

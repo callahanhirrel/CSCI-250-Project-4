@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 //import java.util.ArrayList;
 
 public class DBConstructor {
@@ -60,7 +61,7 @@ public class DBConstructor {
 	}
 	
 	/*Insert data to the Table*/
-	public void insertData(Statement stat, String tablename, String[] data) throws SQLException { 
+	public void insertData(Statement stat, String tablename, List<?> data) throws SQLException { 
 		stat.execute("insert into"
 				+ " "
 				+ tablename
@@ -71,18 +72,40 @@ public class DBConstructor {
 	}
 	
 	/*Generate data*/
-	public String buildData(String[] data) {
+	public String buildData(List<?> data) {
 		String text = new String();
 		
-		for (int i = 0; i < data.length; i++) {
-			if (i == data.length - 1) {
-				text = text + data[i];
+		for (int i = 0; i < data.size(); i++) {
+			if (i == data.size() - 1) {
+				text = text + data.get(i);
 			} else {
-				text = text + data[i] + ", ";
+				text = text + data.get(i) + ", ";
 			}
 		}
 		
 		return text;
 	}
+	
+	/*Create table - one time function*/
+	public void createUserTable() throws SQLException {
+		Connection con = connectDB();
+		Statement stat = editDB(con);
+		String[] fields = {"Username", 
+				"Monday", "Tuesday", "Wednesday", "Thursday", "Friday",
+				"8", "9", "10", "11", "12", 
+				"13", "14", "15", "16", "17", 
+				"18", "19", "20", "21", "22", 
+				"Busy"};
+		String[] types = {"string", 
+				"string", "string", "string", "string", "string",
+				"integer", "integer", "integer", "integer", "integer", 
+				"integer", "integer", "integer", "integer", "integer", 
+				"integer", "integer", "integer", "integer", "integer", 
+				"boolean"};
+		createTable(stat, "user", fields, types);
+		closeDB(con);
+	}
+	
+	/*Insert data into user - one time function?*/
 	
 }

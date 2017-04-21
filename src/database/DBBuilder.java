@@ -50,14 +50,11 @@ public class DBBuilder {
 		} else {
 			return false;
 		}
-<<<<<<< HEAD
 	}
 	
 	public void removeTable(String username) throws SQLException {
 		openConStat();
 		stat.executeQuery("DROP TABLE IF EXISTS " + username + ";");
 		con.close();
-=======
->>>>>>> origin/master
 	}
 }

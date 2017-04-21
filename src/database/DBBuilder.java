@@ -42,12 +42,18 @@ public class DBBuilder {
 	public boolean isTable(String username) throws SQLException {
 		openConStat();
 		DatabaseMetaData soMetaBro = con.getMetaData();
-		ResultSet tables = soMetaBro.getTables(null, null, username + "Schedule", null);
+		ResultSet tables = soMetaBro.getTables(null, null, username, null);
+		con.close();
 		if (tables.next()) {
 			return true;
 		} else {
 			return false;
 		}
-
+	}
+	
+	public void removeTable(String username) throws SQLException {
+		openConStat();
+		stat.executeQuery("DROP TABLE IF EXISTS " + username + ";");
+		con.close();
 	}
 }

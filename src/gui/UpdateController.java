@@ -19,65 +19,65 @@ import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 
 public class UpdateController {
-	
+
 	UpdateHelper helper = new UpdateHelper();
 	DBConstructor data = new DBConstructor();
 	DBBuilder db;
-	
+
 	@FXML
 	Button add;
-	
+
 	@FXML
 	TextArea des;
-	
+
 	@FXML
 	ChoiceBox<String> day;
-	
+
 	@FXML
 	ChoiceBox<String> hour;
-	
+
 	@FXML
 	ChoiceBox<String> min;
-	
+
 	@FXML
 	ChoiceBox<String> per;
-	
+
 	ScheduleController tableList;
-	
+
 	List<String> dayPicker = Arrays.asList("Monday", "Tuesday", "Wednesday", "Thursday", "Friday");
-	
+
 	List<String> hourPicker = helper.hourPickerCreator();
-	
+
 	List<String> minPicker = helper.minPickerCreator();
-	
+
 	List<String> perPicker = Arrays.asList("AM", "PM");
-	
+
 	@FXML
 	public void initialize() throws ClassNotFoundException, SQLException {
 		for (String d: dayPicker) {
 			day.getItems().add(d);
 		}
 		day.getSelectionModel().select(1);
-		
+
 		for (String h: hourPicker) {
 			hour.getItems().add(h);
 		}
 		day.getSelectionModel().selectFirst();
-		
+
 		for (String p: perPicker) {
 			per.getItems().add(p);
 		}
 		per.getSelectionModel().selectFirst();
-		
+
 		for (String m: minPicker) {
 			min.getItems().add(m);
 		}
 		min.getSelectionModel().selectFirst();
-		
+
 //		day.setDisable(true);
 		db = new DBBuilder();
 	}
-	
+
 //	@FXML
 //	void ableDayPicker() {
 //		if (per.getSelectionModel().isSelected(0)) {
@@ -86,22 +86,22 @@ public class UpdateController {
 //			hourPicker = helper.pm();
 //		}
 //	}
-	
+
 	@FXML
 	void addSchedule() throws SQLException {
 		String pickedDay = new String(day.getSelectionModel().getSelectedItem());
 		String time = new String(hour.getSelectionModel().getSelectedItem());
 //		String busy = new String(des.getText());
-		
-		db.modifySchedule(pickedDay, time, "BUSY");
-		
+
+		db.modifySchedule(pickedDay, Integer.parseInt(time), "BUSY");
+
 		System.out.println("OK");
 		populate();
-		
+
 		Stage stage = (Stage) add.getScene().getWindow();
 		stage.close();
 	}
-	
+
 	private void populate() throws SQLException {
 		tableList.table.getItems().clear();
 		Connection con = data.connectDB();
@@ -114,9 +114,9 @@ public class UpdateController {
 	        }
 		}
 	}
-	
+
 	public void importVal(ScheduleController tb) {
 		this.tableList = tb;
 	}
-	
+
 }

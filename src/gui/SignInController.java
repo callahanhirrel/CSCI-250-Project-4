@@ -1,7 +1,6 @@
 package gui;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 import database.DBBuilder;
 import javafx.fxml.FXML;
@@ -16,7 +15,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 
 public class SignInController {
-	
+
 	@FXML
 	Button signIn;
 	@FXML
@@ -25,36 +24,37 @@ public class SignInController {
 	TextField enterUsername;
 	@FXML
 	TextField createUsername;
-	
+
 	DBBuilder dbBuilder;
-	
-	private ArrayList<String> usernames;
-	
+
 	@FXML
 	public void initialize() throws ClassNotFoundException, SQLException {
 		dbBuilder = new DBBuilder();
-		usernames = new ArrayList<String>();
 	}
-	
-	
+
+
 	@FXML
 	public void signIn() {
-		if (usernames.contains(enterUsername.getText())) {
-			ScheduleController.USERNAME = createUsername.getText();
-			loadNext();
-		} else {
-			Alert alert = new Alert(AlertType.ERROR, "Username does not exist. Create a new one!", ButtonType.OK);
-			alert.showAndWait();
+		try {
+			if (dbBuilder.isTable(enterUsername.getText())) {
+				ScheduleController.USERNAME = createUsername.getText();
+				loadNext();
+			} else {
+				Alert alert = new Alert(AlertType.ERROR, "Username does not exist. Create a new one!", ButtonType.OK);
+				alert.showAndWait();
+			}
+		} catch (SQLException e) {
+			ScheduleController.displayError(e.getMessage());
+			e.printStackTrace();
 		}
 	}
-	
+
 
 	@FXML
 	public void create() throws SQLException {
 		String newuser = new String();
 		newuser = createUsername.getText();
-		if (!usernames.contains(newuser)) {
-			usernames.add(newuser);
+		if (!dbBuilder.isTable(newuser)) {
 			dbBuilder.addTable(newuser);
 			ScheduleController.USERNAME = newuser;
 			loadNext();
@@ -63,7 +63,7 @@ public class SignInController {
 			alert.showAndWait();
 		}
 	}
-	
+
 	private void loadNext() {
 		try {
 			FXMLLoader loader = new FXMLLoader();

@@ -4,7 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
+import java.util.List;
+//import java.util.ArrayList;
 
 public class DBConstructor {
 	
@@ -28,24 +29,51 @@ public class DBConstructor {
 		con.close();
 	}
 	
-	public void createTable(Statement stat, String tablename, ArrayList<String> fields, ArrayList<String> types) throws SQLException {
-		stat.execute("create "
-				+ "table "
+//	public void createTable(Statement stat, String tablename, String[] fields, String[] types) throws SQLException {
+//		stat.execute("create "
+//				+ "table "
+//				+ tablename
+//				+ " "
+//				+ "("
+//				+ buildFields(fields, types)
+//				+ ")");
+//	}
+	
+//	public String buildFields(String[] fields, String[] types) {
+//		String text = new String();
+//		
+//		for (int i = 0; i < fields.size(); i++) {
+//			if (i == fields.size() - 1) {
+//				text = text + fields.get(i) + " " + types.get(i);
+//			} else {
+//				text = text + fields.get(i) + " " + types.get(i) + ", ";
+//			}
+//		}
+//		
+//		return text;
+//	}
+	
+
+	/*Insert data to the Table*/
+	public void insertData(Statement stat, String tablename, List<?> data) throws SQLException { 
+		stat.execute("insert into"
+				+ " "
 				+ tablename
 				+ " "
-				+ "("
-				+ buildFields(fields, types)
+				+ "values("
+				+ buildData(data)
 				+ ")");
 	}
 	
-	public String buildFields(ArrayList<String> fields, ArrayList<String> types) {
+	/*Generate data*/
+	public String buildData(List<?> data) {
 		String text = new String();
 		
-		for (int i = 0; i < fields.size(); i++) {
-			if (i == fields.size() - 1) {
-				text = text + fields.get(i) + " " + types.get(i);
+		for (int i = 0; i < data.size(); i++) {
+			if (i == data.size() - 1) {
+				text = text + data.get(i);
 			} else {
-				text = text + fields.get(i) + " " + types.get(i) + ", ";
+				text = text + data.get(i) + ", ";
 			}
 		}
 		
@@ -80,5 +108,31 @@ public class DBConstructor {
 		}
 	}
 	
+	/*Create table - one time function*/
+//	public void createUserTable() throws SQLException {
+//		Connection con = connectDB();
+//		Statement stat = editDB(con);
+//		String[] fields = {"Username", 
+//				"Monday", "Tuesday", "Wednesday", "Thursday", "Friday",
+//				"8", "9", "10", "11", "12", 
+//				"13", "14", "15", "16", "17", 
+//				"18", "19", "20", "21", "22", 
+//				"Busy"};
+//		String[] types = {"string", 
+//				"string", "string", "string", "string", "string",
+//				"integer", "integer", "integer", "integer", "integer", 
+//				"integer", "integer", "integer", "integer", "integer", 
+//				"integer", "integer", "integer", "integer", "integer", 
+//				"boolean"};
+//		createTable(stat, "user", fields, types);
+//		closeDB(con);
+//	}
+	
+	/*Insert data into a col*/
+//	public void updateCol(Statement stat, String colname, String username, String coltext) throws SQLException {
+//		stat.execute("update " + username + "Schedule (" + colname + ") values (" + coltext + ")");
+//	}
+	
+	/*Insert data into user - one time function?*/
 	
 }

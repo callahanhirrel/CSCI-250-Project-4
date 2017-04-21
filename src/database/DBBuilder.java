@@ -19,9 +19,9 @@ public class DBBuilder {
 
 	public void addTable(String username) throws SQLException {
 		 openConStat();
-		 stat.execute("CREATE TABLE " + username + "Schedule (Time STRING, Monday STRING, Tuesday STRING, Wednesday STRING, Thursday STRING, Friday STRING)");
+		 stat.execute("CREATE TABLE " + username + " (Time INTEGER, Monday TEXT, Tuesday TEXT, Wednesday TEXT, Thursday TEXT, Friday TEXT)");
 		 for (int time = 8; time < 23; time++) {
-			 stat.execute("INSERT INTO " + username + "Schedule VALUES ('"+ Integer.toString(time) + "', '', '', '', '', '')");
+			 stat.execute("INSERT INTO " + username + " (Time) VALUES ("+ Integer.toString(time) + ")");
 		 }
 		 con.close();
 	}
@@ -30,10 +30,10 @@ public class DBBuilder {
 		con = DriverManager.getConnection("jdbc:sqlite:project4.db");
 		stat = con.createStatement();
 	}
-	
-	public void modifySchedule(String day, String time, String busy) throws SQLException {
+
+	public void modifySchedule (String day, int time, String busy) throws SQLException {
 		openConStat();
-		stat.execute("UPDATE " + ScheduleController.USERNAME + "Schedule SET " + day + " = '" + busy + "' WHERE Time = '" + time + "'");
+		stat.execute("UPDATE " + ScheduleController.USERNAME + " SET " + day + " = " + busy + " WHERE Time = " + Integer.toString(time));
 		con.close();
 	}
 

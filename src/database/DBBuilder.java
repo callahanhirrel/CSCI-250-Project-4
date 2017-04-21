@@ -6,6 +6,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import gui.ScheduleController;
 
@@ -19,9 +20,17 @@ public class DBBuilder {
 
 	public void addTable(String username) throws SQLException {
 		 openConStat();
+		 ArrayList<String> times = new ArrayList<String>();
+		 for (int time = 8; time < 12; time ++) {
+			 times.add(Integer.toString(time) + ":00 AM");
+		 }
+		 times.add("12:00 PM");
+		 for (int time = 1; time < 12; time ++) {
+			 times.add(Integer.toString(time) + ":00 PM");
+		 }
 		 stat.execute("CREATE TABLE " + username + " (Time TEXT, Monday TEXT, Tuesday TEXT, Wednesday TEXT, Thursday TEXT, Friday TEXT)");
-		 for (int time = 8; time < 23; time++) {
-			 stat.execute("INSERT INTO " + username + " VALUES ('"+ Integer.toString(time) + "', 'FREE', 'FREE', 'FREE', 'FREE', 'FREE')");
+		 for (String time : times) {
+			 stat.execute("INSERT INTO " + username + " VALUES ('"+ time + "', 'FREE', 'FREE', 'FREE', 'FREE', 'FREE')");
 		 }
 		 con.close();
 	}

@@ -92,7 +92,12 @@ public class UpdateController {
 		String pickedDay = new String(day.getSelectionModel().getSelectedItem());
 		String time = new String(hour.getSelectionModel().getSelectedItem());
 //		String busy = new String(des.getText());
-
+		
+		if (per.getSelectionModel().getSelectedItem() == "PM") {
+			time = Integer.toString(Integer.valueOf(time) + 1);
+		}
+		
+		System.out.println(time);
 		db.modifySchedule(pickedDay, time, "BUSY");
 
 		System.out.println("OK");
@@ -106,7 +111,7 @@ public class UpdateController {
 		tableList.table.getItems().clear();
 		Connection con = data.connectDB();
 		Statement stat = data.editDB(con);
-		if (stat.execute("select * from " + ScheduleController.USERNAME + "Schedule")) {
+		if (stat.execute("select * from " + ScheduleController.USERNAME)) {
 			ResultSet results = stat.getResultSet();
 			while (results.next()) {
 	        	tableList.table.getItems().add(new ScheduleTable(results.getString(1), results.getString(2),

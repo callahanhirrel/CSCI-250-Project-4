@@ -63,13 +63,13 @@ public class SignInController {
 				loadNext();
 			} else {
 				resetFields();
-				Alert alert = new Alert(AlertType.ERROR, "Username already exists. Sign in!", ButtonType.OK);
+				Alert alert = new Alert(AlertType.ERROR, "Username already exists. Sign in!!", ButtonType.OK);
 				alert.showAndWait();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 			resetFields();
-			Alert alert = new Alert(AlertType.ERROR, "Username already exists. Sign in!", ButtonType.OK);
+			Alert alert = new Alert(AlertType.ERROR, e.getMessage(), ButtonType.OK);
 			alert.showAndWait();
 		}
 	}

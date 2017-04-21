@@ -24,20 +24,20 @@ public class DBConstructorTest {
 		db.init();
 	}
 	
-	@Test
-	public void test() {
-		String[] fields = {"ID"};
-		String[] types = {"integer"};
-		assertEquals("ID integer", db.buildFields(fields, types));
-	}
-	
-	@Test
-	public void test2() {
-		String[] fields = {"ID", "Project"};
-		String[] types = {"integer", "string"};
-		System.out.println(db.buildFields(fields, types));
-		assertEquals("ID integer, Project string", db.buildFields(fields, types));
-	}
+//	@Test
+//	public void test() {
+//		String[] fields = {"ID"};
+//		String[] types = {"integer"};
+//		assertEquals("ID integer", db.buildFields(fields, types));
+//	}
+//	
+//	@Test
+//	public void test2() {
+//		String[] fields = {"ID", "Project"};
+//		String[] types = {"integer", "string"};
+//		System.out.println(db.buildFields(fields, types));
+//		assertEquals("ID integer, Project string", db.buildFields(fields, types));
+//	}
 	
 	@Test
 	public void test3() {

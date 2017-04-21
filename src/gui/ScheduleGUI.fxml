@@ -29,7 +29,10 @@
                               <Font size="16.0" />
                            </font>
                         </Label>
-                        <ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="321.0" prefWidth="166.0" translateX="5.0" translateY="20.0" />
+                        <ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="321.0" prefWidth="166.0" translateX="5.0" translateY="20.0">
+                           <content>
+                              <VBox fx:id="peerList" prefHeight="309.0" prefWidth="164.0" />
+                           </content></ScrollPane>
                      </children>
                   </VBox>
                   <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="367.0" prefWidth="386.0" translateX="25.0">

@@ -9,57 +9,51 @@ import java.util.List;
 
 public class DBConstructor {
 	
-	/*Initialize database*/
+	String[] daysOfTheWeek = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
+	
 	public void init() throws ClassNotFoundException{
 		Class.forName("org.sqlite.JDBC");
 	}
 	
-	/*Connect to database project4*/
 	public Connection connectDB() throws SQLException {
 		Connection con = DriverManager.getConnection("jdbc:sqlite:project4.db");
 		return con;
 	}
 	
-	/*Create a sql Statement*/
 	public Statement editDB(Connection con) throws SQLException {
 		Statement stat = con.createStatement();
 		return stat;
 	}
 	
-	/*Close connection*/
 	public void closeDB(Connection con) throws SQLException {
 		con.close();
 	}
 	
-	/*Create a Table*/
-	public void createTable(Statement stat, String tablename, String[] fields, String[] types) throws SQLException {
-		stat.execute("drop table if exists"
-				+ " "
-				+ tablename);
-		stat.execute("create "
-				+ "table "
-				+ tablename
-				+ " "
-				+ "("
-				+ buildFields(fields, types)
-				+ ")");
-	}
+//	public void createTable(Statement stat, String tablename, String[] fields, String[] types) throws SQLException {
+//		stat.execute("create "
+//				+ "table "
+//				+ tablename
+//				+ " "
+//				+ "("
+//				+ buildFields(fields, types)
+//				+ ")");
+//	}
 	
-	/*Generate fields*/
-	public String buildFields(String[] fields, String[] types) {
-		String text = new String();
-		
-		for (int i = 0; i < fields.length; i++) {
-			if (i == fields.length - 1) {
-				text = text + fields[i] + " " + types[i];
-			} else {
-				text = text + fields[i] + " " + types[i] + ", ";
-			}
-		}
-		
-		return text;
-	}
+//	public String buildFields(String[] fields, String[] types) {
+//		String text = new String();
+//		
+//		for (int i = 0; i < fields.size(); i++) {
+//			if (i == fields.size() - 1) {
+//				text = text + fields.get(i) + " " + types.get(i);
+//			} else {
+//				text = text + fields.get(i) + " " + types.get(i) + ", ";
+//			}
+//		}
+//		
+//		return text;
+//	}
 	
+
 	/*Insert data to the Table*/
 	public void insertData(Statement stat, String tablename, List<?> data) throws SQLException { 
 		stat.execute("insert into"
@@ -86,25 +80,53 @@ public class DBConstructor {
 		return text;
 	}
 	
-	/*Create table - one time function*/
-	public void createUserTable() throws SQLException {
+	public void createScheduleTables() throws Exception {
 		Connection con = connectDB();
-		Statement stat = editDB(con);
-		String[] fields = {"Username", 
-				"Monday", "Tuesday", "Wednesday", "Thursday", "Friday",
-				"8", "9", "10", "11", "12", 
-				"13", "14", "15", "16", "17", 
-				"18", "19", "20", "21", "22", 
-				"Busy"};
-		String[] types = {"string", 
-				"string", "string", "string", "string", "string",
-				"integer", "integer", "integer", "integer", "integer", 
-				"integer", "integer", "integer", "integer", "integer", 
-				"integer", "integer", "integer", "integer", "integer", 
-				"boolean"};
-		createTable(stat, "user", fields, types);
-		closeDB(con);
+		for (String day : daysOfTheWeek) {
+			Statement stat = editDB(con);
+			try {
+				stat.execute("CREATE TABLE " + day + " ( `username` TEXT, `hour8` INTEGER, `hour9` INTEGER, `hour10` INTEGER, `hour11` INTEGER, `hour12` INTEGER, `hour13` INTEGER, `hour14` INTEGER, `hour15` INTEGER, `hour16` INTEGER, `hour17` INTEGER, `hour18` INTEGER, `hour19` INTEGER, `hour20` INTEGER, `hour21` INTEGER, `hour22` INTEGER )");
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new Exception("Failed to create schedule tables.");
+			}
+		}
+		con.close();
 	}
+	
+	public void addNameToDatabase(String name) throws Exception {
+		Connection con = connectDB();
+		for (String day : daysOfTheWeek) {
+			Statement stat = editDB(con);
+			try {
+				stat.execute("INSERT INTO " + day + "(name,hour8,hour9,hour10,hour11,hour12,hour13,hour14,hour15,hour16,hour17,hour18,hour19,hour20,hour21,hour22) VALUES (" + name + ",0,0,0,0,0,0,0,0,0,0,0,0,0,0,0");
+			}
+			catch (SQLException e) {
+				e.printStackTrace();
+				throw new Exception("Failed to add name to the tables.");
+			}
+		}
+	}
+	
+	/*Create table - one time function*/
+//	public void createUserTable() throws SQLException {
+//		Connection con = connectDB();
+//		Statement stat = editDB(con);
+//		String[] fields = {"Username", 
+//				"Monday", "Tuesday", "Wednesday", "Thursday", "Friday",
+//				"8", "9", "10", "11", "12", 
+//				"13", "14", "15", "16", "17", 
+//				"18", "19", "20", "21", "22", 
+//				"Busy"};
+//		String[] types = {"string", 
+//				"string", "string", "string", "string", "string",
+//				"integer", "integer", "integer", "integer", "integer", 
+//				"integer", "integer", "integer", "integer", "integer", 
+//				"integer", "integer", "integer", "integer", "integer", 
+//				"boolean"};
+//		createTable(stat, "user", fields, types);
+//		closeDB(con);
+//	}
 	
 	/*Insert data into a col*/
 //	public void updateCol(Statement stat, String colname, String username, String coltext) throws SQLException {

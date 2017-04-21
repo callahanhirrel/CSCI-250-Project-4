@@ -103,6 +103,7 @@ public class UpdateController {
 	}
 	
 	private void populate() throws SQLException {
+		tableList.table.getItems().clear();
 		Connection con = data.connectDB();
 		Statement stat = data.editDB(con);
 		if (stat.execute("select * from " + ScheduleController.USERNAME + "Schedule")) {

@@ -3,6 +3,8 @@ package gui;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -61,7 +63,7 @@ public class ScheduleController {
 	private void unpackData(NetworkData data) {
 		if (data.getTag().equals(NetworkData.CONNECT_TAG)) {
 			confirmConnection(data);
-			showPeers();
+			Platform.runLater(() -> showPeers());
 		} else if (data.getTag().equals(NetworkData.MEETING_TAG)) {
 			// TODO
 		} else if (data.getTag().equals(NetworkData.SCHEDULE_TAG)) {
@@ -111,6 +113,12 @@ public class ScheduleController {
 
 	@FXML
 	void connect() {
+// TODO: This might not work, need to see if all IP addresses are formatted this way
+//		Pattern pattern = Pattern.compile("\\d\\d\\.\\d\\d\\d\\.\\d\\d\\d\\.\\d\\d\\d");
+//		Matcher matcher = pattern.matcher(ip.getText());
+//		if (!matcher.lookingAt()) {
+//			displayError("Make sure your IP address is in the form 00.000.000.000");
+//		}
 		new Thread(() -> {
 			try {
 				NetworkData justReceived = client.requestConnection(ip.getText());

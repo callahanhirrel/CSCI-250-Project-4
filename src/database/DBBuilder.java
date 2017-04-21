@@ -46,7 +46,7 @@ public class DBBuilder {
 		stat.execute("UPDATE " + ScheduleController.USERNAME + " SET " + day + " = '" + busy + "' WHERE Time = '" + time + "'");
 		con.close();
 	}
-	
+
 //	public void insertSchedule(String day, String time, String busy) throws SQLException {
 //		System.out.println(ScheduleController.USERNAME);
 //		openConStat();
@@ -62,15 +62,19 @@ public class DBBuilder {
 	// Figure out how to do this from here:
 	// http://stackoverflow.com/questions/2942788/check-if-table-exists
 	public boolean isTable(String username) throws SQLException {
+		boolean isTable;
 		openConStat();
 		DatabaseMetaData soMetaBro = con.getMetaData();
 		ResultSet tables = soMetaBro.getTables(null, null, username, null);
-		con.close();
+
 		if (tables.next()) {
-			return true;
+			isTable = true;
 		} else {
-			return false;
+			isTable = false;
 		}
+
+		con.close();
+		return isTable;
 	}
 
 	public void removeTable(String username) throws SQLException {

@@ -7,6 +7,7 @@ public class UpdateHelper {
 	int halfDay = 12;
 	int morningHour = 4;
 	int afternoonHour = 10;
+	int min = 60;
 	
 	public List<String> hourPickerCreator() {
 		List<String> beginningHour = new ArrayList<String>();
@@ -18,6 +19,22 @@ public class UpdateHelper {
 		}
 		
 		return beginningHour;
+	}
+	
+	public List<String> minPickerCreator() {
+		List<String> beginningMin = new ArrayList<String>();
+		int m = 0;
+		
+		for (int i = 0; i < min; i++) {
+			if (Integer.toString(m).length() < 2) {
+				beginningMin.add("0" + Integer.toString(m));
+			} else {
+				beginningMin.add(Integer.toString(m));
+			}
+			m = m + 1;
+		}
+		
+		return beginningMin;
 	}
 	
 	public List<String> am() {

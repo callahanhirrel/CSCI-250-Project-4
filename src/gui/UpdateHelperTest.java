@@ -23,7 +23,8 @@ public class UpdateHelperTest {
 	public void test() {
 		List<String> x = helper.hourPickerCreator();
 //		x = Arrays.asList("");
-		System.out.println(x);
+		List<String> y = helper.minPickerCreator();
+		System.out.println(y);
 		assertEquals(x, helper.hourPickerCreator());
 	}
 

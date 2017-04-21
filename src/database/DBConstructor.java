@@ -106,6 +106,11 @@ public class DBConstructor {
 		closeDB(con);
 	}
 	
+	/*Insert data into a col*/
+//	public void updateCol(Statement stat, String colname, String username, String coltext) throws SQLException {
+//		stat.execute("update " + username + "Schedule (" + colname + ") values (" + coltext + ")");
+//	}
+	
 	/*Insert data into user - one time function?*/
 	
 }

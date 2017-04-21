@@ -44,11 +44,11 @@ public class DBBuilder {
 		openConStat();
 		DatabaseMetaData soMetaBro = con.getMetaData();
 		ResultSet tables = soMetaBro.getTables(null, null, username, null);
+		con.close();
 		if (tables.next()) {
 			return true;
 		} else {
 			return false;
 		}
-
 	}
 }

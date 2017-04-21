@@ -24,31 +24,33 @@ public class DBConstructorTest {
 		db.init();
 	}
 	
-	@Test
-	public void test() {
-		String[] fields = {"ID"};
-		String[] types = {"integer"};
-		assertEquals("ID integer", db.buildFields(fields, types));
-	}
-	
-	@Test
-	public void test2() {
-		String[] fields = {"ID", "Project"};
-		String[] types = {"integer", "string"};
-		System.out.println(db.buildFields(fields, types));
-		assertEquals("ID integer, Project string", db.buildFields(fields, types));
-	}
+//	@Test
+//	public void test() {
+//		String[] fields = {"ID"};
+//		String[] types = {"integer"};
+//		assertEquals("ID integer", db.buildFields(fields, types));
+//	}
+//	
+//	@Test
+//	public void test2() {
+//		String[] fields = {"ID", "Project"};
+//		String[] types = {"integer", "string"};
+//		System.out.println(db.buildFields(fields, types));
+//		assertEquals("ID integer, Project string", db.buildFields(fields, types));
+//	}
 	
 	@Test
 	public void test3() {
 		String[] data = {"1"};
-		assertEquals("1", db.buildData(data));
+		List<?> ls = Arrays.asList(data);
+		assertEquals("1", db.buildData(ls));
 	}
 	
 	@Test
 	public void test4() {
 		String[] data = {"1", "'DataBase'"};
-		assertEquals("1, 'DataBase'", db.buildData(data));
+		List<?> ls = Arrays.asList(data);
+		assertEquals("1, 'DataBase'", db.buildData(ls));
 	}
 	
 //	@Test
@@ -74,6 +76,7 @@ public class DBConstructorTest {
 	public void test6() {
 		String[] list = {"1", "2", "3"};
 		List<?> ls = Arrays.asList(list);
+//		String[] x = (String[]) ls.toArray();
 		System.out.println(ls);
 	}
 	

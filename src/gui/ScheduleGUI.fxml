@@ -99,17 +99,17 @@
          <content>
             <AnchorPane prefHeight="200.0" prefWidth="200.0">
                <children>
-                  <TableView minHeight="-Infinity" minWidth="-Infinity" prefHeight="285.0" prefWidth="600.0">
+                  <TableView fx:id="table" minHeight="-Infinity" minWidth="-Infinity" prefHeight="285.0" prefWidth="600.0">
                     <columns>
-                      <TableColumn prefWidth="84.0" text="TIME" />
-                      <TableColumn prefWidth="84.0" text="Monday" />
-                        <TableColumn prefWidth="96.0" text="Tuesday" />
-                        <TableColumn prefWidth="107.0" text="Wednesday" />
-                        <TableColumn prefWidth="109.0" text="Thursday" />
-                        <TableColumn prefWidth="119.0" text="Friday" />
+                      <TableColumn fx:id="time" prefWidth="84.0" text="TIME" />
+                      <TableColumn fx:id="mon" prefWidth="84.0" text="Monday" />
+                        <TableColumn fx:id="tue" prefWidth="96.0" text="Tuesday" />
+                        <TableColumn fx:id="wed" prefWidth="107.0" text="Wednesday" />
+                        <TableColumn fx:id="thu" prefWidth="109.0" text="Thursday" />
+                        <TableColumn fx:id="fri" prefWidth="119.0" text="Friday" />
                     </columns>
                   </TableView>
-                  <Button layoutX="14.0" layoutY="305.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="125.0" text="Update Schedule" />
+                  <Button fx:id="updateSchedule" layoutX="14.0" layoutY="305.0" mnemonicParsing="false" onAction="#update" prefHeight="34.0" prefWidth="125.0" text="Update Schedule" />
                </children>
             </AnchorPane>
          </content></Tab>

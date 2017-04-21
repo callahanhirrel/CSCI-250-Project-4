@@ -35,11 +35,13 @@ public class SignInController {
 
 	@FXML
 	public void signIn() {
+		String username = enterUsername.getText();
 		try {
-			if (dbBuilder.isTable(enterUsername.getText())) {
-				ScheduleController.USERNAME = createUsername.getText();
+			if (dbBuilder.isTable(username)) {
+				ScheduleController.USERNAME = username;
 				loadNext();
 			} else {
+				resetFields();
 				Alert alert = new Alert(AlertType.ERROR, "Username does not exist. Create a new one!", ButtonType.OK);
 				alert.showAndWait();
 			}
@@ -51,20 +53,28 @@ public class SignInController {
 
 
 	@FXML
-	public void create() throws SQLException {
+	public void create() {
 		String newuser = new String();
 		newuser = createUsername.getText();
-		if (!dbBuilder.isTable(newuser)) {
-			dbBuilder.addTable(newuser);
-			ScheduleController.USERNAME = newuser;
-			loadNext();
-		} else {
+		try {
+			if (!dbBuilder.isTable(newuser)) {
+				dbBuilder.addTable(newuser);
+				ScheduleController.USERNAME = newuser;
+				loadNext();
+			} else {
+				resetFields();
+				Alert alert = new Alert(AlertType.ERROR, "Username already exists. Sign in!", ButtonType.OK);
+				alert.showAndWait();
+			}
+		} catch (SQLException e) {
+			resetFields();
 			Alert alert = new Alert(AlertType.ERROR, "Username already exists. Sign in!", ButtonType.OK);
 			alert.showAndWait();
 		}
 	}
 
 	private void loadNext() {
+		resetFields();
 		try {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("ScheduleGUI.fxml"));
@@ -77,6 +87,11 @@ public class SignInController {
 			exc.printStackTrace();
 		}
 		create.getScene().getWindow().hide();
+	}
+
+	private void resetFields() {
+		this.createUsername.clear();
+		this.enterUsername.clear();
 	}
 
 }

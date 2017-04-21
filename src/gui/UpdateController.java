@@ -44,7 +44,7 @@ public class UpdateController {
 	
 	ScheduleController tableList;
 	
-	List<String> dayPicker = Arrays.asList("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday");
+	List<String> dayPicker = Arrays.asList("Monday", "Tuesday", "Wednesday", "Thursday", "Friday");
 	
 	List<String> hourPicker = helper.hourPickerCreator();
 	
@@ -90,11 +90,12 @@ public class UpdateController {
 	@FXML
 	void addSchedule() throws SQLException {
 		String pickedDay = new String(day.getSelectionModel().getSelectedItem());
-		String time = new String(hour.getSelectionModel().getSelectedItem() + ":" + min.getSelectionModel().getSelectedItem());
-		String busy = new String(des.getText());
+		String time = new String(hour.getSelectionModel().getSelectedItem());
+//		String busy = new String(des.getText());
 		
-		db.insertSchedule(pickedDay, time, busy);
+		db.modifySchedule(pickedDay, time, "BUSY");
 		
+		System.out.println("OK");
 		populate();
 		
 		Stage stage = (Stage) add.getScene().getWindow();
@@ -104,11 +105,11 @@ public class UpdateController {
 	private void populate() throws SQLException {
 		Connection con = data.connectDB();
 		Statement stat = data.editDB(con);
-		if (stat.execute("select * from " + ScheduleController.USERNAME)) {
+		if (stat.execute("select * from " + ScheduleController.USERNAME + "Schedule")) {
 			ResultSet results = stat.getResultSet();
 			while (results.next()) {
-	        	tableList.table.getItems().add(new ScheduleTable(results.getString(0), results.getString(1),
-		        		results.getString(2), results.getString(3), results.getString(4), results.getString(5)));
+	        	tableList.table.getItems().add(new ScheduleTable(results.getString(1), results.getString(2),
+		        		results.getString(3), results.getString(4), results.getString(5), results.getString(6)));
 	        }
 		}
 	}

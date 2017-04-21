@@ -91,14 +91,14 @@ public class UpdateController {
 	void addSchedule() throws SQLException {
 		String pickedDay = new String(day.getSelectionModel().getSelectedItem());
 		String time = new String(hour.getSelectionModel().getSelectedItem());
-//		String busy = new String(des.getText());
+		String busy = new String(des.getText());
 		
 		if (per.getSelectionModel().getSelectedItem() == "PM") {
 			time = Integer.toString(Integer.valueOf(time) + 12);
 		}
 		
 		System.out.println(time);
-		db.modifySchedule(pickedDay, time, "BUSY");
+		db.modifySchedule(pickedDay, time, busy);
 
 		System.out.println("OK");
 		populate();

@@ -21,7 +21,7 @@ public class DBBuilder {
 		 openConStat();
 		 stat.execute("CREATE TABLE " + username + " (Time TEXT, Monday TEXT, Tuesday TEXT, Wednesday TEXT, Thursday TEXT, Friday TEXT)");
 		 for (int time = 8; time < 23; time++) {
-			 stat.execute("INSERT INTO " + username + " VALUES ('"+ Integer.toString(time) + "', '', '', '', '', '')");
+			 stat.execute("INSERT INTO " + username + " VALUES ('"+ Integer.toString(time) + "', 'FREE', 'FREE', 'FREE', 'FREE', 'FREE')");
 		 }
 		 con.close();
 	}

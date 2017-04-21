@@ -92,8 +92,13 @@ public class UpdateController {
 		String pickedDay = new String(day.getSelectionModel().getSelectedItem());
 		String time = new String(hour.getSelectionModel().getSelectedItem());
 //		String busy = new String(des.getText());
-
-		db.modifySchedule(pickedDay, Integer.parseInt(time), "BUSY");
+		
+		if (per.getSelectionModel().getSelectedItem() == "PM") {
+			time = Integer.toString(Integer.valueOf(time) + 1);
+		}
+		
+		System.out.println(time);
+		db.modifySchedule(pickedDay, time, "BUSY");
 
 		System.out.println("OK");
 		populate();

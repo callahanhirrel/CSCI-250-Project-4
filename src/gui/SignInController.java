@@ -67,6 +67,7 @@ public class SignInController {
 				alert.showAndWait();
 			}
 		} catch (SQLException e) {
+			e.printStackTrace();
 			resetFields();
 			Alert alert = new Alert(AlertType.ERROR, "Username already exists. Sign in!", ButtonType.OK);
 			alert.showAndWait();

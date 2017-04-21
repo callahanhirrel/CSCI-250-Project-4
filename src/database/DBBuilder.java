@@ -26,7 +26,7 @@ public class DBBuilder {
 		 con.close();
 	}
 
-	public void openConStat() throws SQLException {
+	private void openConStat() throws SQLException {
 		con = DriverManager.getConnection("jdbc:sqlite:project4.db");
 		stat = con.createStatement();
 	}

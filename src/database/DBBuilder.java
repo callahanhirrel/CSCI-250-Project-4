@@ -21,7 +21,7 @@ public class DBBuilder {
 		 openConStat();
 		 stat.execute("CREATE TABLE " + username + " (Time TEXT, Monday TEXT, Tuesday TEXT, Wednesday TEXT, Thursday TEXT, Friday TEXT)");
 		 for (int time = 8; time < 23; time++) {
-			 stat.execute("INSERT INTO " + username + " (Time) VALUES ('"+ Integer.toString(time) + "', '', '', '', '', '')");
+			 stat.execute("INSERT INTO " + username + " VALUES ('"+ Integer.toString(time) + "', '', '', '', '', '')");
 		 }
 		 con.close();
 	}
@@ -56,11 +56,11 @@ public class DBBuilder {
 		openConStat();
 		DatabaseMetaData soMetaBro = con.getMetaData();
 		ResultSet tables = soMetaBro.getTables(null, null, username, null);
+		con.close();
 		if (tables.next()) {
 			return true;
 		} else {
 			return false;
 		}
-
 	}
 }

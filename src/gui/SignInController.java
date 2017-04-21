@@ -51,14 +51,19 @@ public class SignInController {
 
 
 	@FXML
-	public void create() throws SQLException {
+	public void create() {
 		String newuser = new String();
 		newuser = createUsername.getText();
-		if (!dbBuilder.isTable(newuser)) {
-			dbBuilder.addTable(newuser);
-			ScheduleController.USERNAME = newuser;
-			loadNext();
-		} else {
+		try {
+			if (!dbBuilder.isTable(newuser)) {
+				dbBuilder.addTable(newuser);
+				ScheduleController.USERNAME = newuser;
+				loadNext();
+			} else {
+				Alert alert = new Alert(AlertType.ERROR, "Username already exists. Sign in!", ButtonType.OK);
+				alert.showAndWait();
+			}
+		} catch (SQLException e) {
 			Alert alert = new Alert(AlertType.ERROR, "Username already exists. Sign in!", ButtonType.OK);
 			alert.showAndWait();
 		}

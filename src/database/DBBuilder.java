@@ -31,9 +31,9 @@ public class DBBuilder {
 		stat = con.createStatement();
 	}
 
-	public void modifySchedule (String day, int time, String busy) throws SQLException {
+	public void modifySchedule (String day, String time, String busy) throws SQLException {
 		openConStat();
-		stat.execute("UPDATE " + ScheduleController.USERNAME + " SET " + day + " = " + busy + " WHERE Time = " + Integer.toString(time));
+		stat.execute("UPDATE " + ScheduleController.USERNAME + " SET " + day + " = " + busy + " WHERE Time = " + time);
 		con.close();
 	}
 

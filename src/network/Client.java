@@ -28,7 +28,6 @@ public class Client {
 
 	public NetworkData requestConnection(String ip) throws UnknownHostException, IOException, ClassNotFoundException {
 		Socket target = new Socket(ip, Server.PORT);
-		System.out.println(ip);
 		NetworkData request = new NetworkData(NetworkData.CONNECT_TAG);
 		sendRequest(target, request);
 		NetworkData justReceived = receiveData(target);

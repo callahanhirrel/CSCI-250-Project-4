@@ -63,4 +63,10 @@ public class DBBuilder {
 			return false;
 		}
 	}
+
+	public void removeTable(String username) throws SQLException {
+		openConStat();
+		stat.executeQuery("DROP TABLE IF EXISTS " + username + ";");
+		con.close();
+	}
 }

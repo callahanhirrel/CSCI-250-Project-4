@@ -34,13 +34,22 @@ public class UpdateController {
 	ChoiceBox<String> day;
 
 	@FXML
-	ChoiceBox<String> hour;
+	ChoiceBox<String> begHour;
 
 	@FXML
-	ChoiceBox<String> min;
+	ChoiceBox<String> begMin;
 
 	@FXML
-	ChoiceBox<String> per;
+	ChoiceBox<String> begPer;
+
+	@FXML
+	ChoiceBox<String> endHour;
+
+	@FXML
+	ChoiceBox<String> endMin;
+
+	@FXML
+	ChoiceBox<String> endPer;
 
 	ScheduleController tableList;
 
@@ -48,7 +57,7 @@ public class UpdateController {
 
 	List<String> hourPicker = helper.hourPickerCreator();
 
-	List<String> minPicker = helper.minPickerCreator();
+	List<String> minPicker = Arrays.asList("00", "30");//helper.minPickerCreator();
 
 	List<String> perPicker = Arrays.asList("AM", "PM");
 
@@ -60,19 +69,26 @@ public class UpdateController {
 		day.getSelectionModel().select(1);
 
 		for (String h: hourPicker) {
-			hour.getItems().add(h);
+			begHour.getItems().add(h);
+			endHour.getItems().add(h);
 		}
-		day.getSelectionModel().selectFirst();
+		begHour.getSelectionModel().select(7);
+		endHour.getSelectionModel().select(8);
 
 		for (String p: perPicker) {
-			per.getItems().add(p);
+			begPer.getItems().add(p);
+			endPer.getItems().add(p);
 		}
-		per.getSelectionModel().selectFirst();
+		begPer.getSelectionModel().selectFirst();
+		endPer.getSelectionModel().selectFirst();
 
 		for (String m: minPicker) {
-			min.getItems().add(m);
+			begMin.getItems().add(m);
+			endMin.getItems().add(m);
+
 		}
-		min.getSelectionModel().selectFirst();
+		begMin.getSelectionModel().selectFirst();
+		endMin.getSelectionModel().selectFirst();
 
 //		day.setDisable(true);
 		db = new DBBuilder();
@@ -90,17 +106,48 @@ public class UpdateController {
 	@FXML
 	void addSchedule() throws SQLException {
 		String pickedDay = new String(day.getSelectionModel().getSelectedItem());
-		String time = new String(hour.getSelectionModel().getSelectedItem());
+		int begH = Integer.parseInt(begHour.getSelectionModel().getSelectedItem());
+		int endH = Integer.parseInt(endHour.getSelectionModel().getSelectedItem());
+		int endM = Integer.parseInt(endMin.getSelectionModel().getSelectedItem());
+		String begM = new String(begMin.getSelectionModel().getSelectedItem());
+		String begP = new String(begPer.getSelectionModel().getSelectedItem());
 		String busy = new String(des.getText());
-		
-		if (per.getSelectionModel().getSelectedItem() == "PM") {
-			time = Integer.toString(Integer.valueOf(time)) + ":00 PM";
-		} else {
-			time = Integer.toString(Integer.valueOf(time)) + ":00 AM";
+		String endP = new String(endPer.getSelectionModel().getSelectedItem());
+		System.out.println("BegP : " + begP + "\n" + "EndP: " + endP);
+		if (begP.equals("AM") && endP.equals("PM")) {
+			while (begH < 13) {
+				String time = new String(Integer.toString(begH) + ":" +  begM + " " + begP);
+				db.modifySchedule(pickedDay, time, busy);
+				if (begM == "30") {
+					begH += 1;
+					begM = "00";
+					if (begH == 12) {
+						begP = "PM";
+					}
+				} else {
+					begM = "30";
+				}
+			}
+			if (begH == 13) {
+				begH = 1;
+			}
 		}
-		
-		System.out.println(time);
-		db.modifySchedule(pickedDay, time, busy);
+
+		while (begH < endH) {
+			String time = new String(Integer.toString(begH) + ":" +  begM + " " + endP);
+			db.modifySchedule(pickedDay, time, busy);
+			if (begM == "30") {
+				begH += 1;
+				begM = "00";
+			} else {
+				begM = "30";
+
+			}
+		}
+		if (endM == 30) {
+			String time = new String(Integer.toString(endH) + ":00 " + endP);
+			db.modifySchedule(pickedDay, time, busy);
+		}
 
 		System.out.println("OK");
 		populate();

@@ -20,20 +20,30 @@ public class DBBuilder {
 
 	public void addTable(String username) throws SQLException {
 		 openConStat();
-		 ArrayList<String> times = new ArrayList<String>();
-		 for (int time = 8; time < 12; time ++) {
-			 times.add(Integer.toString(time) + ":00 AM");
-		 }
-		 times.add("12:00 PM");
-		 for (int time = 1; time < 12; time ++) {
-			 times.add(Integer.toString(time) + ":00 PM");
-		 }
+		 ArrayList<String> times = buildTimeArray();
 		 stat.execute("CREATE TABLE " + username + " (Time TEXT, Monday TEXT, Tuesday TEXT, Wednesday TEXT, Thursday TEXT, Friday TEXT)");
 		 for (String time : times) {
 			 stat.execute("INSERT INTO " + username + " VALUES ('"+ time + "', 'FREE', 'FREE', 'FREE', 'FREE', 'FREE')");
 		 }
 		 con.close();
 	}
+	
+	
+	private ArrayList<String> buildTimeArray() {
+		ArrayList<String> times = new ArrayList<String>();
+		for (int time = 8; time < 12; time ++) {
+			times.add(Integer.toString(time) + ":00 AM");
+			times.add(Integer.toString(time) + ":30 AM");
+		}
+		times.add("12:00 PM");
+		times.add("12:30 PM");
+		for (int time = 1; time < 11; time ++) {
+			times.add(Integer.toString(time) + ":00 PM");
+			times.add(Integer.toString(time) + ":30 PM");
+		}
+		return times;
+	}
+	 
 
 	private void openConStat() throws SQLException {
 		con = DriverManager.getConnection("jdbc:sqlite:project4.db");

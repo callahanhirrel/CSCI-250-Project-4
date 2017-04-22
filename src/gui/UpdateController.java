@@ -103,49 +103,15 @@ public class UpdateController {
 		String begP = new String(begPer.getSelectionModel().getSelectedItem());
 		String busy = new String(des.getText());
 		String endP = new String(endPer.getSelectionModel().getSelectedItem());
-		if (begP.equals("AM") && endP.equals("PM")) {
-			while (begH < 13) {
-				String time = new String(Integer.toString(begH) + ":" +  begM + " " + begP);
-				db.modifySchedule(pickedDay, time, busy);
-				if (begM == "30") {
-					begH += 1;
-					begM = "00";
-					if (begH == 12) {
-						begP = "PM";
-					}
-				} else {
-					begM = "30";
-				}
-			}
-			if (begH == 13) {
-				begH = 1;
-			}
-		}
-
-		while (begH < endH) {
-			String time = new String(Integer.toString(begH) + ":" +  begM + " " + endP);
-			db.modifySchedule(pickedDay, time, busy);
-			if (begM == "30") {
-				begH += 1;
-				begM = "00";
-			} else {
-				begM = "30";
-
-			}
-		}
-		if (endM.equals("30")) {
-			String time = new String(Integer.toString(endH) + ":00 " + endP);
-			db.modifySchedule(pickedDay, time, busy);
-		}
-
-		System.out.println("OK");
-		populate();
+		
+		helper.fillSchedule(pickedDay, begM, endM, begP, endP, busy, begH, endH, db);
+		populateTable();
 
 		Stage stage = (Stage) add.getScene().getWindow();
 		stage.close();
 	}
 
-	private void populate() throws SQLException {
+	private void populateTable() throws SQLException {
 		tableList.table.getItems().clear();
 		Connection con = data.connectDB();
 		Statement stat = data.editDB(con);

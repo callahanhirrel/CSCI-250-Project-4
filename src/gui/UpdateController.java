@@ -57,7 +57,7 @@ public class UpdateController {
 
 	List<String> hourPicker = helper.hourPickerCreator();
 
-	List<String> minPicker = Arrays.asList("00", "30");//helper.minPickerCreator();
+	List<String> minPicker = Arrays.asList("00", "30");
 
 	List<String> perPicker = Arrays.asList("AM", "PM");
 
@@ -90,30 +90,19 @@ public class UpdateController {
 		begMin.getSelectionModel().selectFirst();
 		endMin.getSelectionModel().selectFirst();
 
-//		day.setDisable(true);
 		db = new DBBuilder();
 	}
-
-//	@FXML
-//	void ableDayPicker() {
-//		if (per.getSelectionModel().isSelected(0)) {
-//			hourPicker = helper.am();
-//		} else {
-//			hourPicker = helper.pm();
-//		}
-//	}
 
 	@FXML
 	void addSchedule() throws SQLException {
 		String pickedDay = new String(day.getSelectionModel().getSelectedItem());
 		int begH = Integer.parseInt(begHour.getSelectionModel().getSelectedItem());
 		int endH = Integer.parseInt(endHour.getSelectionModel().getSelectedItem());
-		int endM = Integer.parseInt(endMin.getSelectionModel().getSelectedItem());
 		String begM = new String(begMin.getSelectionModel().getSelectedItem());
+		String endM = new String(endMin.getSelectionModel().getSelectedItem());
 		String begP = new String(begPer.getSelectionModel().getSelectedItem());
 		String busy = new String(des.getText());
 		String endP = new String(endPer.getSelectionModel().getSelectedItem());
-		System.out.println("BegP : " + begP + "\n" + "EndP: " + endP);
 		if (begP.equals("AM") && endP.equals("PM")) {
 			while (begH < 13) {
 				String time = new String(Integer.toString(begH) + ":" +  begM + " " + begP);
@@ -144,7 +133,7 @@ public class UpdateController {
 
 			}
 		}
-		if (endM == 30) {
+		if (endM.equals("30")) {
 			String time = new String(Integer.toString(endH) + ":00 " + endP);
 			db.modifySchedule(pickedDay, time, busy);
 		}

@@ -3,8 +3,8 @@ package gui;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.concurrent.ArrayBlockingQueue;
-//import java.util.regex.Matcher;
-//import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 //import Controllers.CourseInfo;
 import javafx.application.Platform;
@@ -32,20 +32,20 @@ public class ScheduleController {
 
 	// FXML Objects under "Home" tab go here:
 	@FXML VBox peerList;
-	
+
 	// FXML Objects under "Schedule a Meeting" tab go here:
 
 	// FXML Objects under "My Schedule" tab go here:
 
 	// FXML Objects under "Connect with a Peer" tab go here:
-	@FXML 
+	@FXML
 	TextField ip;
-	@FXML 
+	@FXML
 	Button  connect;
-	@FXML 
+	@FXML
 	Label connectMessage;
-	
-	@FXML 
+
+	@FXML
 	TableView<ScheduleTable> table;
 	@FXML
 	TableColumn<TableView<ScheduleTable>, String> time;
@@ -76,7 +76,7 @@ public class ScheduleController {
 
 		new Thread(() -> startServer()).start();
 		new Thread(() -> getData()).start();
-		
+
 		time.setCellValueFactory(new PropertyValueFactory<>("time"));
 		mon.setCellValueFactory(new PropertyValueFactory<>("mon"));
 		tue.setCellValueFactory(new PropertyValueFactory<>("tue"));
@@ -155,36 +155,43 @@ public class ScheduleController {
 
 	@FXML
 	void connect() {
-// TODO: This might not work, need to see if all IP addresses are formatted this way
-//		Pattern pattern = Pattern.compile("\\d\\d\\.\\d\\d\\d\\.\\d\\d\\d\\.\\d\\d\\d");
-//		Matcher matcher = pattern.matcher(ip.getText());
-//		if (!matcher.lookingAt()) {
-//			displayError("Make sure your IP address is in the form 00.000.000.000");
-//		}
-		new Thread(() -> {
-			try {
-				NetworkData justReceived = client.requestConnection(ip.getText());
-				dataCollection.add(justReceived);
-			} catch (IOException | ClassNotFoundException e) {
-				Platform.runLater(() -> displayError(e.getMessage()));
-				e.printStackTrace();
-			}
-		}).start();
+		if (!isValidIP(ip.getText())) {
+			displayError("IP address in incorrect format, must be X.X.X.X, where X is any number from 0 to 255");
+		} else {
+			new Thread(() -> {
+				try {
+					NetworkData justReceived = client.requestConnection(ip.getText());
+					dataCollection.add(justReceived);
+				} catch (IOException | ClassNotFoundException e) {
+					e.printStackTrace();
+				}
+			}).start();
+		}
 	}
-	
+
+	private boolean isValidIP(String ip) {
+		// Regular expression determines IP address input is in correct IPv4 address format
+		Pattern pattern = Pattern.compile("\\b([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])" +
+											"\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])" +
+											"\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])" +
+											"\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\b");
+		Matcher matcher = pattern.matcher(ip);
+		return matcher.lookingAt();
+	}
+
 	@FXML
 	void update() {
 		try{
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("UpdateGUI.fxml"));
 			AnchorPane root = (AnchorPane) loader.load();
-			
+
 			Stage secondStage = new Stage();
 			Scene scene = new Scene(root);
-			
+
 			UpdateController updater = (UpdateController)loader.getController();
 			updater.importVal(this);
-			
+
 			secondStage.setScene(scene);
 			secondStage.show();
 		} catch(Exception e) {

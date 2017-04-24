@@ -94,7 +94,7 @@ public class UpdateController {
 //		String busy = new String(des.getText());
 		
 		if (per.getSelectionModel().getSelectedItem() == "PM") {
-			time = Integer.toString(Integer.valueOf(time) + 1);
+			time = Integer.toString(Integer.valueOf(time) + 12);
 		}
 		
 		System.out.println(time);

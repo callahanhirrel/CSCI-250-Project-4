@@ -36,31 +36,19 @@ public class ScheduleController {
 	// FXML Objects under "Schedule a Meeting" tab go here:
 
 	// FXML Objects under "My Schedule" tab go here:
+	@FXML TableView<ScheduleTable> table;
+	@FXML TableColumn<TableView<ScheduleTable>, String> time;
+	@FXML TableColumn<TableView<ScheduleTable>, String> mon;
+	@FXML TableColumn<TableView<ScheduleTable>, String> tue;
+	@FXML TableColumn<TableView<ScheduleTable>, String> wed;
+	@FXML TableColumn<TableView<ScheduleTable>, String> thu;
+	@FXML TableColumn<TableView<ScheduleTable>, String> fri;
+	@FXML Button updateSchedule;
 
 	// FXML Objects under "Connect with a Peer" tab go here:
-	@FXML
-	TextField ip;
-	@FXML
-	Button  connect;
-	@FXML
-	Label connectMessage;
-
-	@FXML
-	TableView<ScheduleTable> table;
-	@FXML
-	TableColumn<TableView<ScheduleTable>, String> time;
-	@FXML
-	TableColumn<TableView<ScheduleTable>, String> mon;
-	@FXML
-	TableColumn<TableView<ScheduleTable>, String> tue;
-	@FXML
-	TableColumn<TableView<ScheduleTable>, String> wed;
-	@FXML
-	TableColumn<TableView<ScheduleTable>, String> thu;
-	@FXML
-	TableColumn<TableView<ScheduleTable>, String> fri;
-	@FXML
-	Button updateSchedule;
+	@FXML TextField ip;
+	@FXML Button  connect;
+	@FXML Label connectMessage;
 
 //	ScheduleController schedule;
 	// All other fields go here:

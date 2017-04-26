@@ -1,6 +1,10 @@
 package gui;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.net.UnknownHostException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -9,6 +13,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import database.DBConstructor;
 //import Controllers.CourseInfo;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -67,9 +72,11 @@ public class ScheduleController {
 	private Client client;
 	private ArrayBlockingQueue<NetworkData> dataCollection;
 	public static String USERNAME;
+	
+	DBConstructor data = new DBConstructor();
 
 	@FXML
-	public void initialize() {
+	public void initialize() throws SQLException {
 		client = new Client();
 		dataCollection = new ArrayBlockingQueue<>(20);
 
@@ -87,6 +94,7 @@ public class ScheduleController {
 //		        schedule = table.getSelectionModel().getSelectedItem();
 //		     }
 //		});
+		populateTable();
 	}
 
 	private void getData() {
@@ -236,4 +244,16 @@ public class ScheduleController {
 		}
 	}
 
+	private void populateTable() throws SQLException {
+		this.table.getItems().clear();
+		Connection con = data.connectDB();
+		Statement stat = data.editDB(con);
+		if (stat.execute("select * from " + ScheduleController.USERNAME)) {
+			ResultSet results = stat.getResultSet();
+			while (results.next()) {
+	        	this.table.getItems().add(new ScheduleTable(results.getString(1), results.getString(2),
+		        		results.getString(3), results.getString(4), results.getString(5), results.getString(6)));
+	        }
+		}
+	}
 }

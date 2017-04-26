@@ -44,7 +44,7 @@
                                     <Font size="16.0" />
                                  </font>
                               </Label>
-                              <DatePicker fx:id="datepicker" prefHeight="27.0" prefWidth="178.0" translateX="5.0" />
+                              <DatePicker prefHeight="27.0" prefWidth="178.0" translateX="5.0" />
                            </children>
                         </HBox>
                         <HBox prefHeight="32.0" prefWidth="426.0" translateY="15.0">
@@ -54,26 +54,23 @@
                                     <Font size="16.0" />
                                  </font>
                               </Label>
-                              <ChoiceBox fx:id="hour" prefHeight="27.0" prefWidth="48.0" translateX="10.0" />
+                              <ChoiceBox prefHeight="27.0" prefWidth="48.0" translateX="10.0" />
                               <Label text=":" translateX="15.0">
                                  <font>
                                     <Font size="24.0" />
                                  </font>
                               </Label>
-                              <ChoiceBox fx:id="minute" prefHeight="27.0" prefWidth="48.0" translateX="20.0" />
-                              <ChoiceBox fx:id="am_pm" prefHeight="27.0" prefWidth="48.0" translateX="25.0" />
+                              <ChoiceBox prefHeight="27.0" prefWidth="48.0" translateX="20.0" />
+                              <ChoiceBox prefHeight="27.0" prefWidth="48.0" translateX="25.0" />
                            </children>
                         </HBox>
                         <Pane prefHeight="29.0" prefWidth="386.0" translateY="25.0">
                            <children>
-                              <Button fx:id="check" mnemonicParsing="false" onAction="#checkSchedules" text="Check Schedules" />
-                              <Button fx:id="reset" layoutX="152.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="82.0" text="Reset" />
+                              <Button mnemonicParsing="false" text="Check Schedules" />
+                              <Button layoutX="152.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="82.0" text="Reset" />
                            </children>
                         </Pane>
-                        <ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="234.0" prefWidth="260.0" translateY="35.0">
-                           <content>
-                              <VBox fx:id="freePeers" prefHeight="231.0" prefWidth="256.0" />
-                           </content></ScrollPane>
+                        <ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="234.0" prefWidth="260.0" translateY="35.0" />
                      </children>
                   </VBox>
                </children>

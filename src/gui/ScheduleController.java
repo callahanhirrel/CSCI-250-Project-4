@@ -41,9 +41,8 @@ public class ScheduleController {
 	@FXML ChoiceBox<String> hour;
 	@FXML ChoiceBox<String> minute;
 	@FXML ChoiceBox<String> am_pm;
-	@FXML Button reset;
-	@FXML Button check;
 	@FXML VBox freePeers;
+
 
 	// FXML Objects under "Schedule a Meeting" tab go here:
 
@@ -150,7 +149,7 @@ public class ScheduleController {
 	// This can be used for displaying all errors, from any class
 	public static void displayError(String errorMessage) {
 		Alert alert = new Alert(AlertType.ERROR, errorMessage, ButtonType.OK);
-		Platform.runLater(() -> alert.showAndWait());
+		alert.showAndWait();
 	}
 
 	@FXML

@@ -23,6 +23,10 @@ public class NetworkData implements Serializable {
 		this.username = ScheduleController.USERNAME;
 	}
 
+	public String getTag() {
+		return this.tag;
+	}
+
 	public void setQuery(String q) {
 		this.query = q;
 	}
@@ -35,9 +39,6 @@ public class NetworkData implements Serializable {
 		return this.isFree;
 	}
 
-	public String getTag() {
-		return this.tag;
-	}
 
 	public String getUsername() {
 		return this.username;

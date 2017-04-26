@@ -5,6 +5,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 
@@ -34,6 +36,68 @@ public class Client {
 		target.close();
 		return justReceived;
 	}
+
+	public ArrayList<String> checkPeerSchedules(String hour, String minute, String am_pm, LocalDate date) throws UnknownHostException, IOException, ClassNotFoundException {
+		String day = reformatDay(date.getDayOfWeek().getValue());
+		String time = reformatTime(hour, minute, am_pm);
+		ArrayList<String> whoIsFree = new ArrayList<>();
+
+		for (String peerUsername : peers.keySet()) {
+			String query = buildQuery(day, time, peerUsername);
+			NetworkData justReceived = requestMeeting(peerUsername, peers.get(peerUsername), query);
+			String message = buildMessage(justReceived, day, time);
+			whoIsFree.add(message);
+		}
+
+		return whoIsFree;
+	}
+
+	private String buildMessage(NetworkData justReceived, String day, String time) {
+		String msg;
+		String peerName = justReceived.getUsername();
+
+		if (justReceived.getIsFree()) {
+			msg = peerName + " is free on " + day + " at " + time;
+		} else {
+			msg = peerName + " is busy on " + day + " at " + time;
+		}
+		return msg;
+	}
+
+	private NetworkData requestMeeting(String peerName, String ip, String query) throws UnknownHostException, IOException, ClassNotFoundException {
+		NetworkData request = new NetworkData(NetworkData.MEETING_TAG);
+		request.setQuery(query);
+		Socket target = new Socket(ip, Server.PORT);
+		sendRequest(target, request);
+		NetworkData justReceived = receiveData(target);
+		return justReceived;
+	}
+
+	private String reformatDay(int day) {
+		if (day == 1) {
+			return "Monday";
+		} else if (day == 2) {
+			return "Tuesday";
+		} else if (day == 3) {
+			return "Wednesday";
+		} else if (day == 4) {
+			return "Thursday";
+		} else {
+			return "Friday";
+		}
+	}
+
+	private String reformatTime(String hour, String minute, String am_pm) {
+		String time = hour + ":" + minute + " " + am_pm;
+		return time;
+	}
+
+	private String buildQuery(String day, String time, String peerName) {
+		String query = "SELECT " + day + " FROM " + peerName + " WHERE Time = " + time;
+		return query;
+	}
+
+
 
 	private void sendRequest(Socket target, NetworkData request) throws IOException {
 		ObjectOutputStream sockout = new ObjectOutputStream(target.getOutputStream());

@@ -1,6 +1,8 @@
 package gui;
 
 import java.io.IOException;
+import java.net.UnknownHostException;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.regex.Matcher;
@@ -15,6 +17,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 //import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
@@ -32,6 +36,13 @@ public class ScheduleController {
 
 	// FXML Objects under "Home" tab go here:
 	@FXML VBox peerList;
+	@FXML DatePicker datepicker;
+	@FXML ChoiceBox<String> hour;
+	@FXML ChoiceBox<String> minute;
+	@FXML ChoiceBox<String> am_pm;
+	@FXML Button reset;
+	@FXML Button check;
+	@FXML VBox freePeers;
 
 	// FXML Objects under "Schedule a Meeting" tab go here:
 
@@ -138,7 +149,7 @@ public class ScheduleController {
 	// This can be used for displaying all errors, from any class
 	public static void displayError(String errorMessage) {
 		Alert alert = new Alert(AlertType.ERROR, errorMessage, ButtonType.OK);
-		alert.showAndWait();
+		Platform.runLater(() -> alert.showAndWait());
 	}
 
 	@FXML
@@ -165,6 +176,31 @@ public class ScheduleController {
 											"\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\b");
 		Matcher matcher = pattern.matcher(ip);
 		return matcher.lookingAt();
+	}
+
+	@FXML
+	void checkSchedules() {
+		LocalDate date = datepicker.getValue();
+		if (isWeekday(date)) {
+				try {
+					client.checkPeerSchedules(hour.getValue(), minute.getValue(), am_pm.getValue(), date);
+				} catch (IOException | ClassNotFoundException e) {
+					displayError(e.getMessage());
+					e.printStackTrace();
+				}
+		} else {
+			displayError("Please only select weekdays");
+		}
+	}
+
+	private boolean isWeekday(LocalDate date) {
+		int dateAsInt = date.getDayOfWeek().getValue();
+
+		if (dateAsInt == 6 || dateAsInt == 7) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 	@FXML

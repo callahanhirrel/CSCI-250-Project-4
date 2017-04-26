@@ -3,6 +3,7 @@ package gui;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.regex.Matcher;
@@ -181,15 +182,25 @@ public class ScheduleController {
 	@FXML
 	void checkSchedules() {
 		LocalDate date = datepicker.getValue();
+		ArrayList<String> whoIsFree;
 		if (isWeekday(date)) {
 				try {
-					client.checkPeerSchedules(hour.getValue(), minute.getValue(), am_pm.getValue(), date);
+					whoIsFree = client.checkPeerSchedules(hour.getValue(), minute.getValue(), am_pm.getValue(), date);
+					Platform.runLater(() -> showWhoIsFree(whoIsFree));
 				} catch (IOException | ClassNotFoundException e) {
 					displayError(e.getMessage());
 					e.printStackTrace();
 				}
 		} else {
 			displayError("Please only select weekdays");
+		}
+	}
+
+	void showWhoIsFree(ArrayList<String> whoIsFree) {
+		for (String msg : whoIsFree) {
+			Label label = new Label();
+			label.setText(msg);
+			freePeers.getChildren().add(label);
 		}
 	}
 

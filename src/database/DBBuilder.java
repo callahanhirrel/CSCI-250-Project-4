@@ -27,8 +27,8 @@ public class DBBuilder {
 		 }
 		 con.close();
 	}
-	
-	
+
+
 	private ArrayList<String> buildTimeArray() {
 		ArrayList<String> times = new ArrayList<String>();
 		for (int time = 8; time < 12; time ++) {
@@ -43,7 +43,7 @@ public class DBBuilder {
 		}
 		return times;
 	}
-	 
+
 
 	private void openConStat() throws SQLException {
 		con = DriverManager.getConnection("jdbc:sqlite:project4.db");
@@ -91,5 +91,13 @@ public class DBBuilder {
 		openConStat();
 		stat.executeQuery("DROP TABLE IF EXISTS " + username + ";");
 		con.close();
+	}
+
+	public String isFree(String query, String day) throws SQLException {
+		openConStat();
+		stat.execute(query);
+		ResultSet rs = stat.getResultSet();
+		String free = rs.getString(day);
+		return free;
 	}
 }

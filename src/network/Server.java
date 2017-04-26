@@ -56,6 +56,8 @@ public class Server {
 		private void unpackData(NetworkData data) throws IOException {
 			if (data.getTag().equals(NetworkData.CONNECT_TAG)) {
 				confirmConnection(data);
+			} else if (data.getTag().equals(NetworkData.MEETING_TAG)) {
+				confirmMeeting()
 			}
 		}
 

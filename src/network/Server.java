@@ -5,7 +5,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.SQLException;
 
+import database.DBBuilder;
 import gui.ScheduleController;
 
 public class Server {
@@ -41,7 +43,7 @@ public class Server {
 				NetworkData justReceived = getData();
 				System.out.println("Server: Received [" + justReceived.getTag() + "]");
 				unpackData(justReceived);
-			} catch (IOException | ClassNotFoundException e) {
+			} catch (IOException | ClassNotFoundException | SQLException e) {
 				ScheduleController.displayError(e.getMessage());
 				e.printStackTrace();
 			}
@@ -53,11 +55,11 @@ public class Server {
 			return justReceived;
 		}
 
-		private void unpackData(NetworkData data) throws IOException {
+		private void unpackData(NetworkData data) throws IOException, ClassNotFoundException, SQLException {
 			if (data.getTag().equals(NetworkData.CONNECT_TAG)) {
 				confirmConnection(data);
 			} else if (data.getTag().equals(NetworkData.MEETING_TAG)) {
-				confirmMeeting()
+				confirmMeeting(data);
 			}
 		}
 
@@ -66,6 +68,30 @@ public class Server {
 			NetworkData toSend = new NetworkData(NetworkData.CONNECT_TAG);
 			sockout.writeObject(toSend);
 			System.out.println("Server: Sent [" + toSend.getTag() + "]");
+			sockout.flush();
+		}
+
+		private void confirmMeeting(NetworkData data) throws ClassNotFoundException, SQLException, IOException {
+			DBBuilder dbb = new DBBuilder();
+			NetworkData toSend = new NetworkData(NetworkData.MEETING_TAG);
+
+			String free = dbb.isFree(data.getQuery(), data.getDayOfRequest());
+			boolean isFree = checkFree(free);
+
+			toSend.setIsFree(isFree);
+
+			ObjectOutputStream sockout = new ObjectOutputStream(socket.getOutputStream());
+			sockout.writeObject(toSend);
+			System.out.println("Server: Sent [" + toSend.getTag() + "]");
+			sockout.flush();
+		}
+
+		private boolean checkFree(String s) {
+			if (s.equals("FREE")) {
+				return true;
+			} else {
+				return false;
+			}
 		}
 	}
 }

@@ -6,7 +6,6 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 
 import gui.ScheduleController;
 
@@ -20,30 +19,12 @@ public class DBBuilder {
 
 	public void addTable(String username) throws SQLException {
 		 openConStat();
-		 ArrayList<String> times = buildTimeArray();
 		 stat.execute("CREATE TABLE " + username + " (Time TEXT, Monday TEXT, Tuesday TEXT, Wednesday TEXT, Thursday TEXT, Friday TEXT)");
-		 for (String time : times) {
-			 stat.execute("INSERT INTO " + username + " VALUES ('"+ time + "', 'FREE', 'FREE', 'FREE', 'FREE', 'FREE')");
+		 for (int time = 8; time < 23; time++) {
+			 stat.execute("INSERT INTO " + username + " (Time) VALUES ("+ Integer.toString(time) + ")");
 		 }
 		 con.close();
 	}
-	
-	
-	private ArrayList<String> buildTimeArray() {
-		ArrayList<String> times = new ArrayList<String>();
-		for (int time = 8; time < 12; time ++) {
-			times.add(Integer.toString(time) + ":00 AM");
-			times.add(Integer.toString(time) + ":30 AM");
-		}
-		times.add("12:00 PM");
-		times.add("12:30 PM");
-		for (int time = 1; time < 11; time ++) {
-			times.add(Integer.toString(time) + ":00 PM");
-			times.add(Integer.toString(time) + ":30 PM");
-		}
-		return times;
-	}
-	 
 
 	private void openConStat() throws SQLException {
 		con = DriverManager.getConnection("jdbc:sqlite:project4.db");
@@ -57,36 +38,20 @@ public class DBBuilder {
 		con.close();
 	}
 
-//	public void insertSchedule(String day, String time, String busy) throws SQLException {
-//		System.out.println(ScheduleController.USERNAME);
-//		openConStat();
-//<<<<<<< HEAD
-//		stat.execute("insert into " + ScheduleController.USERNAME + "Schedule (Time) values (" + "'" + time + "'" + ")");
-//		stat.execute("update " + ScheduleController.USERNAME + "Schedule set " + day + " = '" + busy + "' where Time = '" + time + "'");
-//=======
-//		stat.execute("UPDATE " + ScheduleController.USERNAME + " SET " + day + " = " + busy + " WHERE Time = " + Integer.toString(time));
-//>>>>>>> master
-//		con.close();
-//	}
-
 	// Figure out how to do this from here:
 	// http://stackoverflow.com/questions/2942788/check-if-table-exists
 	public boolean isTable(String username) throws SQLException {
-		boolean isTable;
 		openConStat();
 		DatabaseMetaData soMetaBro = con.getMetaData();
 		ResultSet tables = soMetaBro.getTables(null, null, username, null);
-
-		if (tables.next()) {
-			isTable = true;
-		} else {
-			isTable = false;
-		}
-
 		con.close();
-		return isTable;
+		if (tables.next()) {
+			return true;
+		} else {
+			return false;
+		}
 	}
-
+	
 	public void removeTable(String username) throws SQLException {
 		openConStat();
 		stat.executeQuery("DROP TABLE IF EXISTS " + username + ";");

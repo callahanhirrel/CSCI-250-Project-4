@@ -47,6 +47,8 @@ public class ScheduleController {
 	@FXML ChoiceBox<String> minute;
 	@FXML ChoiceBox<String> am_pm;
 	@FXML VBox freePeers;
+	@FXML Button checkSchedules;
+	@FXML Button reset;
 
 
 	// FXML Objects under "Schedule a Meeting" tab go here:
@@ -72,7 +74,7 @@ public class ScheduleController {
 	private Client client;
 	private ArrayBlockingQueue<NetworkData> dataCollection;
 	public static String USERNAME;
-	
+
 	DBConstructor data = new DBConstructor();
 
 	@FXML

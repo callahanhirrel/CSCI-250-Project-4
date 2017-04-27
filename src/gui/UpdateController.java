@@ -34,13 +34,22 @@ public class UpdateController {
 	ChoiceBox<String> day;
 
 	@FXML
-	ChoiceBox<String> hour;
+	ChoiceBox<String> begHour;
 
 	@FXML
-	ChoiceBox<String> min;
+	ChoiceBox<String> begMin;
 
 	@FXML
-	ChoiceBox<String> per;
+	ChoiceBox<String> begPer;
+
+	@FXML
+	ChoiceBox<String> endHour;
+
+	@FXML
+	ChoiceBox<String> endMin;
+
+	@FXML
+	ChoiceBox<String> endPer;
 
 	ScheduleController tableList;
 
@@ -48,7 +57,7 @@ public class UpdateController {
 
 	List<String> hourPicker = helper.hourPickerCreator();
 
-	List<String> minPicker = helper.minPickerCreator();
+	List<String> minPicker = Arrays.asList("00", "30");
 
 	List<String> perPicker = Arrays.asList("AM", "PM");
 
@@ -60,49 +69,49 @@ public class UpdateController {
 		day.getSelectionModel().select(1);
 
 		for (String h: hourPicker) {
-			hour.getItems().add(h);
+			begHour.getItems().add(h);
+			endHour.getItems().add(h);
 		}
-		day.getSelectionModel().selectFirst();
+		begHour.getSelectionModel().select(7);
+		endHour.getSelectionModel().select(8);
 
 		for (String p: perPicker) {
-			per.getItems().add(p);
+			begPer.getItems().add(p);
+			endPer.getItems().add(p);
 		}
-		per.getSelectionModel().selectFirst();
+		begPer.getSelectionModel().selectFirst();
+		endPer.getSelectionModel().selectFirst();
 
 		for (String m: minPicker) {
-			min.getItems().add(m);
-		}
-		min.getSelectionModel().selectFirst();
+			begMin.getItems().add(m);
+			endMin.getItems().add(m);
 
-//		day.setDisable(true);
+		}
+		begMin.getSelectionModel().selectFirst();
+		endMin.getSelectionModel().selectFirst();
+
 		db = new DBBuilder();
 	}
-
-//	@FXML
-//	void ableDayPicker() {
-//		if (per.getSelectionModel().isSelected(0)) {
-//			hourPicker = helper.am();
-//		} else {
-//			hourPicker = helper.pm();
-//		}
-//	}
 
 	@FXML
 	void addSchedule() throws SQLException {
 		String pickedDay = new String(day.getSelectionModel().getSelectedItem());
-		String time = new String(hour.getSelectionModel().getSelectedItem());
-//		String busy = new String(des.getText());
-
-		db.modifySchedule(pickedDay, time, "BUSY");
-
-		System.out.println("OK");
-		populate();
+		int begH = Integer.parseInt(begHour.getSelectionModel().getSelectedItem());
+		int endH = Integer.parseInt(endHour.getSelectionModel().getSelectedItem());
+		String begM = new String(begMin.getSelectionModel().getSelectedItem());
+		String endM = new String(endMin.getSelectionModel().getSelectedItem());
+		String begP = new String(begPer.getSelectionModel().getSelectedItem());
+		String busy = new String(des.getText());
+		String endP = new String(endPer.getSelectionModel().getSelectedItem());
+		
+		helper.fillSchedule(pickedDay, begM, endM, begP, endP, busy, begH, endH, db);
+		populateTable();
 
 		Stage stage = (Stage) add.getScene().getWindow();
 		stage.close();
 	}
 
-	private void populate() throws SQLException {
+	private void populateTable() throws SQLException {
 		tableList.table.getItems().clear();
 		Connection con = data.connectDB();
 		Statement stat = data.editDB(con);

@@ -12,6 +12,9 @@ public class NetworkData implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String tag;
 	private String username;
+	private String query;
+	private String dayOfRequest;
+	private boolean isFree;
 	public static String CONNECT_TAG = "CONNECTION REQUEST";
 	public static String MEETING_TAG = "MEETING REQUEST";
 	public static String SCHEDULE_TAG = "SCHEDULE REQUEST";
@@ -25,7 +28,31 @@ public class NetworkData implements Serializable {
 		return this.tag;
 	}
 
+	public void setQuery(String q) {
+		this.query = q;
+	}
+
+	public void setIsFree(boolean bool) {
+		this.isFree = bool;
+	}
+
+	public boolean getIsFree() {
+		return this.isFree;
+	}
+
 	public String getUsername() {
 		return this.username;
+	}
+
+	public void setDayOfRequest(String day) {
+		this.dayOfRequest = day;
+	}
+
+	public String getDayOfRequest() {
+		return this.dayOfRequest;
+	}
+
+	public String getQuery() {
+		return this.query;
 	}
 }

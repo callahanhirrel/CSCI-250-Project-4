@@ -1,11 +1,19 @@
 package gui;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.net.UnknownHostException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import database.DBConstructor;
 //import Controllers.CourseInfo;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -15,6 +23,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 //import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
@@ -32,35 +42,31 @@ public class ScheduleController {
 
 	// FXML Objects under "Home" tab go here:
 	@FXML VBox peerList;
-	
+	@FXML DatePicker datepicker;
+	@FXML ChoiceBox<String> hour;
+	@FXML ChoiceBox<String> minute;
+	@FXML ChoiceBox<String> am_pm;
+	@FXML VBox freePeers;
+	@FXML Button checkSchedules;
+	@FXML Button reset;
+
+
 	// FXML Objects under "Schedule a Meeting" tab go here:
 
 	// FXML Objects under "My Schedule" tab go here:
+	@FXML TableView<ScheduleTable> table;
+	@FXML TableColumn<TableView<ScheduleTable>, String> time;
+	@FXML TableColumn<TableView<ScheduleTable>, String> mon;
+	@FXML TableColumn<TableView<ScheduleTable>, String> tue;
+	@FXML TableColumn<TableView<ScheduleTable>, String> wed;
+	@FXML TableColumn<TableView<ScheduleTable>, String> thu;
+	@FXML TableColumn<TableView<ScheduleTable>, String> fri;
+	@FXML Button updateSchedule;
 
 	// FXML Objects under "Connect with a Peer" tab go here:
-	@FXML 
-	TextField ip;
-	@FXML 
-	Button  connect;
-	@FXML 
-	Label connectMessage;
-	
-	@FXML 
-	TableView<ScheduleTable> table;
-	@FXML
-	TableColumn<TableView<ScheduleTable>, String> time;
-	@FXML
-	TableColumn<TableView<ScheduleTable>, String> mon;
-	@FXML
-	TableColumn<TableView<ScheduleTable>, String> tue;
-	@FXML
-	TableColumn<TableView<ScheduleTable>, String> wed;
-	@FXML
-	TableColumn<TableView<ScheduleTable>, String> thu;
-	@FXML
-	TableColumn<TableView<ScheduleTable>, String> fri;
-	@FXML
-	Button updateSchedule;
+	@FXML TextField ip;
+	@FXML Button  connect;
+	@FXML Label connectMessage;
 
 //	ScheduleController schedule;
 	// All other fields go here:
@@ -69,14 +75,16 @@ public class ScheduleController {
 	private ArrayBlockingQueue<NetworkData> dataCollection;
 	public static String USERNAME;
 
+	DBConstructor data = new DBConstructor();
+
 	@FXML
-	public void initialize() {
+	public void initialize() throws SQLException {
 		client = new Client();
 		dataCollection = new ArrayBlockingQueue<>(20);
 
 		new Thread(() -> startServer()).start();
 		new Thread(() -> getData()).start();
-		
+
 		time.setCellValueFactory(new PropertyValueFactory<>("time"));
 		mon.setCellValueFactory(new PropertyValueFactory<>("mon"));
 		tue.setCellValueFactory(new PropertyValueFactory<>("tue"));
@@ -88,6 +96,7 @@ public class ScheduleController {
 //		        schedule = table.getSelectionModel().getSelectedItem();
 //		     }
 //		});
+		populateTable();
 	}
 
 	private void getData() {
@@ -155,36 +164,78 @@ public class ScheduleController {
 
 	@FXML
 	void connect() {
-// TODO: This might not work, need to see if all IP addresses are formatted this way
-//		Pattern pattern = Pattern.compile("\\d\\d\\.\\d\\d\\d\\.\\d\\d\\d\\.\\d\\d\\d");
-//		Matcher matcher = pattern.matcher(ip.getText());
-//		if (!matcher.lookingAt()) {
-//			displayError("Make sure your IP address is in the form 00.000.000.000");
-//		}
-		new Thread(() -> {
-			try {
-				NetworkData justReceived = client.requestConnection(ip.getText());
-				dataCollection.add(justReceived);
-			} catch (IOException | ClassNotFoundException e) {
-				Platform.runLater(() -> displayError(e.getMessage()));
-				e.printStackTrace();
-			}
-		}).start();
+		if (!isValidIP(ip.getText())) {
+			displayError("IP address in incorrect format, must be X.X.X.X, where X is any number from 0 to 255");
+		} else {
+			new Thread(() -> {
+				try {
+					NetworkData justReceived = client.requestConnection(ip.getText());
+					dataCollection.add(justReceived);
+				} catch (IOException | ClassNotFoundException e) {
+					e.printStackTrace();
+				}
+			}).start();
+		}
 	}
-	
+
+	private boolean isValidIP(String ip) {
+		// Regular expression determines IP address input is in correct IPv4 address format
+		Pattern pattern = Pattern.compile("\\b([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])" +
+											"\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])" +
+											"\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])" +
+											"\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\b");
+		Matcher matcher = pattern.matcher(ip);
+		return matcher.lookingAt();
+	}
+
+	@FXML
+	void checkSchedules() {
+		LocalDate date = datepicker.getValue();
+		ArrayList<String> whoIsFree;
+		if (isWeekday(date)) {
+				try {
+					whoIsFree = client.checkPeerSchedules(hour.getValue(), minute.getValue(), am_pm.getValue(), date);
+					Platform.runLater(() -> showWhoIsFree(whoIsFree));
+				} catch (IOException | ClassNotFoundException e) {
+					displayError(e.getMessage());
+					e.printStackTrace();
+				}
+		} else {
+			displayError("Please only select weekdays");
+		}
+	}
+
+	void showWhoIsFree(ArrayList<String> whoIsFree) {
+		for (String msg : whoIsFree) {
+			Label label = new Label();
+			label.setText(msg);
+			freePeers.getChildren().add(label);
+		}
+	}
+
+	private boolean isWeekday(LocalDate date) {
+		int dateAsInt = date.getDayOfWeek().getValue();
+
+		if (dateAsInt == 6 || dateAsInt == 7) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
 	@FXML
 	void update() {
 		try{
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("UpdateGUI.fxml"));
 			AnchorPane root = (AnchorPane) loader.load();
-			
+
 			Stage secondStage = new Stage();
 			Scene scene = new Scene(root);
-			
+
 			UpdateController updater = (UpdateController)loader.getController();
 			updater.importVal(this);
-			
+
 			secondStage.setScene(scene);
 			secondStage.show();
 		} catch(Exception e) {
@@ -195,4 +246,16 @@ public class ScheduleController {
 		}
 	}
 
+	private void populateTable() throws SQLException {
+		this.table.getItems().clear();
+		Connection con = data.connectDB();
+		Statement stat = data.editDB(con);
+		if (stat.execute("select * from " + ScheduleController.USERNAME)) {
+			ResultSet results = stat.getResultSet();
+			while (results.next()) {
+	        	this.table.getItems().add(new ScheduleTable(results.getString(1), results.getString(2),
+		        		results.getString(3), results.getString(4), results.getString(5), results.getString(6)));
+	        }
+		}
+	}
 }

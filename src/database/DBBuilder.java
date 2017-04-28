@@ -51,10 +51,18 @@ public class DBBuilder {
 			return false;
 		}
 	}
-	
+
 	public void removeTable(String username) throws SQLException {
 		openConStat();
 		stat.executeQuery("DROP TABLE IF EXISTS " + username + ";");
 		con.close();
+	}
+
+	public String isFree(String query, String day) throws SQLException {
+		openConStat();
+		stat.execute(query);
+		ResultSet rs = stat.getResultSet();
+		String free = rs.getString(day);
+		return free;
 	}
 }

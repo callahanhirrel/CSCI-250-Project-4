@@ -14,6 +14,7 @@ import database.DBConstructor;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.TableView;
 //import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
@@ -66,7 +67,7 @@ public class UpdateController {
 		for (String d: dayPicker) {
 			day.getItems().add(d);
 		}
-		day.getSelectionModel().select(1);
+		day.getSelectionModel().selectFirst();
 
 		for (String h: hourPicker) {
 			begHour.getItems().add(h);
@@ -105,23 +106,10 @@ public class UpdateController {
 		String endP = new String(endPer.getSelectionModel().getSelectedItem());
 		
 		helper.fillSchedule(pickedDay, begM, endM, begP, endP, busy, begH, endH, db);
-		populateTable();
+		helper.populateTable(tableList.table);
 
 		Stage stage = (Stage) add.getScene().getWindow();
 		stage.close();
-	}
-
-	private void populateTable() throws SQLException {
-		tableList.table.getItems().clear();
-		Connection con = data.connectDB();
-		Statement stat = data.editDB(con);
-		if (stat.execute("select * from " + ScheduleController.USERNAME)) {
-			ResultSet results = stat.getResultSet();
-			while (results.next()) {
-	        	tableList.table.getItems().add(new ScheduleTable(results.getString(1), results.getString(2),
-		        		results.getString(3), results.getString(4), results.getString(5), results.getString(6)));
-	        }
-		}
 	}
 
 	public void importVal(ScheduleController tb) {

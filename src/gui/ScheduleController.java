@@ -8,7 +8,9 @@ import java.sql.Statement;
 import java.net.UnknownHostException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -49,8 +51,7 @@ public class ScheduleController {
 	@FXML VBox freePeers;
 	@FXML Button checkSchedules;
 	@FXML Button reset;
-
-
+	@FXML Button getRec;
 	// FXML Objects under "Schedule a Meeting" tab go here:
 
 	// FXML Objects under "My Schedule" tab go here:
@@ -76,6 +77,13 @@ public class ScheduleController {
 	public static String USERNAME;
 
 	DBConstructor data = new DBConstructor();
+	UpdateHelper helper = new UpdateHelper();
+	
+	List<String> hourPicker = helper.hourPickerCreator();
+
+	List<String> minPicker = Arrays.asList("00", "30");
+
+	List<String> perPicker = Arrays.asList("AM", "PM");
 
 	@FXML
 	public void initialize() throws SQLException {
@@ -96,6 +104,20 @@ public class ScheduleController {
 //		        schedule = table.getSelectionModel().getSelectedItem();
 //		     }
 //		});
+		for (String h: hourPicker) {
+			hour.getItems().add(h);
+		}
+		hour.getSelectionModel().select(7);
+
+		for (String p: perPicker) {
+			am_pm.getItems().add(p);
+		}
+		am_pm.getSelectionModel().selectFirst();
+
+		for (String m: minPicker) {
+			minute.getItems().add(m);
+		}
+		minute.getSelectionModel().selectFirst();
 		populateTable();
 	}
 
@@ -245,7 +267,7 @@ public class ScheduleController {
 			r.showAndWait();
 		}
 	}
-
+	
 	private void populateTable() throws SQLException {
 		this.table.getItems().clear();
 		Connection con = data.connectDB();
@@ -257,5 +279,19 @@ public class ScheduleController {
 		        		results.getString(3), results.getString(4), results.getString(5), results.getString(6)));
 	        }
 		}
+	}
+	
+	@FXML
+	void getRec() {
+		
+	}
+	
+	@FXML
+	void reset() {
+		datepicker.getEditor().clear();
+		hour.getSelectionModel().select(7);
+		am_pm.getSelectionModel().selectFirst();
+		minute.getSelectionModel().selectFirst();
+		freePeers.getChildren().clear();
 	}
 }

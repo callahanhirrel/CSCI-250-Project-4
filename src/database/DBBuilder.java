@@ -25,9 +25,10 @@ public class DBBuilder {
 		 for (String time : times) {
 			 stat.execute("INSERT INTO " + username + " VALUES ('"+ time + "', 'FREE', 'FREE', 'FREE', 'FREE', 'FREE')");
 		 }
+		 stat.close();
 		 con.close();
 	}
-	
+
 	private ArrayList<String> buildTimeArray() {
 		ArrayList<String> times = new ArrayList<String>();
 		for (int time = 8; time < 12; time ++) {
@@ -42,7 +43,7 @@ public class DBBuilder {
 		}
 		return times;
 	}
-	 
+
 
 	private void openConStat() throws SQLException {
 		con = DriverManager.getConnection("jdbc:sqlite:project4.db");
@@ -53,6 +54,7 @@ public class DBBuilder {
 	public void modifySchedule (String day, String time, String busy) throws SQLException {
 		openConStat();
 		stat.execute("UPDATE " + ScheduleController.USERNAME + " SET " + day + " = '" + busy + "' WHERE Time = '" + time + "'");
+		stat.close();
 		con.close();
 	}
 
@@ -69,6 +71,7 @@ public class DBBuilder {
 			isTable = false;
 		}
 
+		stat.close();
 		con.close();
 		return isTable;
 	}
@@ -76,14 +79,17 @@ public class DBBuilder {
 	public void removeTable(String username) throws SQLException {
 		openConStat();
 		stat.executeQuery("DROP TABLE IF EXISTS " + username + ";");
+		stat.close();
 		con.close();
 	}
-	
+
 	public String isFree(String query, String day) throws SQLException {
 		openConStat();
 		stat.execute(query);
 		ResultSet rs = stat.getResultSet();
-		String free = rs.getString(day);
+		rs.next();
+		String free = rs.getString(1);
+		stat.close();
 		con.close();
 		return free;
 	}

@@ -22,8 +22,6 @@ public class DBBuilderTest {
 
 	@Test
 	public void createTableTest() throws SQLException {
-		db.removeTable("TEST");
-		db.removeTable("DTrump");
 		db.addTable("test");
 		db.addTable("DTrump");
 		assertTrue(db.isTable("TEST"));
@@ -32,12 +30,4 @@ public class DBBuilderTest {
 		db.removeTable("TEST");
 		db.removeTable("DTrump");
 	}
-	/*
-	public void modifyScheduleTest() throws SQLException {
-		createTableTest();
-		db.modifySchedule("Monday", 8, "BUSY");
-		resultSet = stat.executeQuery(arg0)
-	}
-	*/
-
 }

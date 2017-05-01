@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import database.DBBuilder;
@@ -61,7 +62,21 @@ public class Server {
 				confirmConnection(data);
 			} else if (data.getTag().equals(NetworkData.MEETING_TAG)) {
 				confirmMeeting(data);
+			} else if (data.getTag().equals(NetworkData.SCHEDULE_TAG)) {
+				getSchedule(data);
 			}
+		}
+
+		private void getSchedule(NetworkData data) throws ClassNotFoundException, SQLException, IOException {
+			DBBuilder dbb = new DBBuilder();
+			NetworkData toSend = new NetworkData(NetworkData.SCHEDULE_TAG);
+			ResultSet rs = dbb.getEntireDB(data.getQuery());
+			toSend.setResultSet(rs);
+
+			ObjectOutputStream sockout = new ObjectOutputStream(socket.getOutputStream());
+			sockout.writeObject(toSend);
+			System.out.println("Server: Sent [" + toSend.getTag() + "]");
+			sockout.flush();
 		}
 
 		private void confirmConnection(NetworkData data) throws IOException {

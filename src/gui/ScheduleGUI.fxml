@@ -84,11 +84,11 @@
             <AnchorPane prefHeight="200.0" prefWidth="200.0">
                <children>
                   <ScrollPane layoutX="12.0" layoutY="120.0" prefHeight="236.0" prefWidth="573.0">
-                    <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
-                    </content>
+                     <content>
+                        <VBox fx:id="recList" prefHeight="230.0" prefWidth="571.0" />
+                     </content>
                   </ScrollPane>
-                  <Button layoutX="14.0" layoutY="74.0" mnemonicParsing="false" text="Get Recommendations" />
+                  <Button fx:id="getRec" layoutX="14.0" layoutY="74.0" mnemonicParsing="false" onAction="#getRec" text="Get Recommendations" />
                   <Label layoutX="12.0" layoutY="14.0" prefHeight="50.0" prefWidth="553.0" text="Click the button below and this application will generate recommendations for meeting times" wrapText="true">
                      <font>
                         <Font size="14.0" />

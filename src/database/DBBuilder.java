@@ -93,4 +93,13 @@ public class DBBuilder {
 		con.close();
 		return free;
 	}
+
+	public ResultSet getEntireDB(String query) throws SQLException {
+		openConStat();
+		stat.execute(query);
+		ResultSet rs = stat.getResultSet();
+		stat.close();
+		con.close();
+		return rs;
+	}
 }

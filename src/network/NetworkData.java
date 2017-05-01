@@ -1,6 +1,7 @@
 package network;
 
 import java.io.Serializable;
+import java.sql.ResultSet;
 
 import gui.ScheduleController;
 
@@ -14,6 +15,7 @@ public class NetworkData implements Serializable {
 	private String username;
 	private String query;
 	private String dayOfRequest;
+	private ResultSet rs;
 	private boolean isFree;
 	public static String CONNECT_TAG = "CONNECTION REQUEST";
 	public static String MEETING_TAG = "MEETING REQUEST";
@@ -22,6 +24,14 @@ public class NetworkData implements Serializable {
 	public NetworkData(String tag) {
 		this.tag = tag;
 		this.username = ScheduleController.USERNAME;
+	}
+
+	public ResultSet getResultSet() {
+		return this.rs;
+	}
+
+	public void setResultSet(ResultSet results) {
+		this.rs = results;
 	}
 
 	public String getTag() {

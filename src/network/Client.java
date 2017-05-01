@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.sql.ResultSet;
 import java.util.HashMap;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -52,6 +53,16 @@ public class Client {
 		return whoIsFree;
 	}
 
+	public void getMeetingRecommendations() throws UnknownHostException, ClassNotFoundException, IOException {
+		HashMap<String, ResultSet> peerTables = new HashMap<>();
+		for (String peerUsername : peers.keySet()) {
+			String query = "SELECT * FROM " + peerUsername;
+			NetworkData justReceived = requestRecommendations(peerUsername, peers.get(peerUsername), query);
+			peerTables.put(peerUsername, justReceived.getResultSet());
+		}
+
+	}
+
 	private String buildMessage(NetworkData justReceived, String day, String time) {
 		String msg;
 		String peerName = justReceived.getUsername();
@@ -62,6 +73,15 @@ public class Client {
 			msg = peerName + " is busy on " + day + " at " + time;
 		}
 		return msg;
+	}
+
+	private NetworkData requestRecommendations(String peerName, String ip, String query) throws UnknownHostException, IOException, ClassNotFoundException {
+		NetworkData request = new NetworkData(NetworkData.SCHEDULE_TAG);
+		request.setQuery(query);
+		Socket target = new Socket(ip, Server.PORT);
+		sendRequest(target, request);
+		NetworkData justReceived = receiveData(target);
+		return justReceived;
 	}
 
 	private NetworkData requestMeeting(String peerName, String ip, String query) throws UnknownHostException, IOException, ClassNotFoundException {

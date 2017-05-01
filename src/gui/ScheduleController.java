@@ -5,7 +5,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.net.UnknownHostException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,7 +15,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import database.DBConstructor;
-//import Controllers.CourseInfo;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -28,7 +26,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-//import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -51,8 +48,9 @@ public class ScheduleController {
 	@FXML VBox freePeers;
 	@FXML Button checkSchedules;
 	@FXML Button reset;
-	@FXML Button getRec;
 	// FXML Objects under "Schedule a Meeting" tab go here:
+	@FXML Button getRec;
+	@FXML VBox recList;
 
 	// FXML Objects under "My Schedule" tab go here:
 	@FXML TableView<ScheduleTable> table;
@@ -69,7 +67,6 @@ public class ScheduleController {
 	@FXML Button  connect;
 	@FXML Label connectMessage;
 
-//	ScheduleController schedule;
 	// All other fields go here:
 	private Server server;
 	private Client client;
@@ -78,7 +75,7 @@ public class ScheduleController {
 
 	DBConstructor data = new DBConstructor();
 	UpdateHelper helper = new UpdateHelper();
-	
+
 	List<String> hourPicker = helper.hourPickerCreator();
 
 	List<String> minPicker = Arrays.asList("00", "30");
@@ -267,7 +264,7 @@ public class ScheduleController {
 			r.showAndWait();
 		}
 	}
-	
+
 	private void populateTable() throws SQLException {
 		this.table.getItems().clear();
 		Connection con = data.connectDB();
@@ -280,12 +277,12 @@ public class ScheduleController {
 	        }
 		}
 	}
-	
+
 	@FXML
 	void getRec() {
-		
+
 	}
-	
+
 	@FXML
 	void reset() {
 		datepicker.getEditor().clear();

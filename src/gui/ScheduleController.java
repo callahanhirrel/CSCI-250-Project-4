@@ -115,7 +115,7 @@ public class ScheduleController {
 			minute.getItems().add(m);
 		}
 		minute.getSelectionModel().selectFirst();
-		populateTable();
+		helper.populateTable(table);
 	}
 
 	private void getData() {
@@ -262,19 +262,6 @@ public class ScheduleController {
 			Alert r = new Alert(AlertType.NONE, "TESTING." , ButtonType.OK);
 			r.setTitle("ERROR");
 			r.showAndWait();
-		}
-	}
-
-	private void populateTable() throws SQLException {
-		this.table.getItems().clear();
-		Connection con = data.connectDB();
-		Statement stat = data.editDB(con);
-		if (stat.execute("select * from " + ScheduleController.USERNAME)) {
-			ResultSet results = stat.getResultSet();
-			while (results.next()) {
-	        	this.table.getItems().add(new ScheduleTable(results.getString(1), results.getString(2),
-		        		results.getString(3), results.getString(4), results.getString(5), results.getString(6)));
-	        }
 		}
 	}
 

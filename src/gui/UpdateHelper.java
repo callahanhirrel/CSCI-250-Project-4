@@ -1,10 +1,15 @@
 package gui;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 import database.DBBuilder;
+import javafx.scene.control.TableView;
 
 public class UpdateHelper {
 	int halfDay = 12;
@@ -70,6 +75,19 @@ public class UpdateHelper {
 		if (endM.equals("30")) {
 			String time = new String(Integer.toString(endH) + ":00 " + endP);
 			db.modifySchedule(pickedDay, time, busy);
+		}
+	}
+	
+	public void populateTable(TableView<ScheduleTable> table) throws SQLException {
+		table.getItems().clear();
+		Connection con = DriverManager.getConnection("jdbc:sqlite:project4.db");
+		Statement stat = con.createStatement();
+		if (stat.execute("select * from " + ScheduleController.USERNAME)) {
+			ResultSet results = stat.getResultSet();
+			while (results.next()) {
+	        	table.getItems().add(new ScheduleTable(results.getString(1), results.getString(2),
+		        	results.getString(3), results.getString(4), results.getString(5), results.getString(6)));
+	        }
 		}
 	}
 	

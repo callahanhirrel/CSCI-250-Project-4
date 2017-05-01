@@ -9,6 +9,7 @@ import java.sql.SQLException;
 
 import database.DBBuilder;
 import gui.ScheduleController;
+import javafx.application.Platform;
 
 public class Server {
 
@@ -44,7 +45,7 @@ public class Server {
 				System.out.println("Server: Received [" + justReceived.getTag() + "]");
 				unpackData(justReceived);
 			} catch (IOException | ClassNotFoundException | SQLException e) {
-				ScheduleController.displayError(e.getMessage());
+				Platform.runLater(() -> ScheduleController.displayError(e.getMessage()));
 				e.printStackTrace();
 			}
 		}

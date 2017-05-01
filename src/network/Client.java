@@ -93,7 +93,7 @@ public class Client {
 	}
 
 	private String buildQuery(String day, String time, String peerName) {
-		String query = "SELECT " + day + " FROM " + peerName + " WHERE Time = " + time;
+		String query = "SELECT " + day + " FROM " + peerName + " WHERE Time = '" + time + "'";
 		return query;
 	}
 

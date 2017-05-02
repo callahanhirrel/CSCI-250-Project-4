@@ -267,7 +267,7 @@ public class ScheduleController {
 			r.showAndWait();
 		}
 	}
-	
+	//"fk yiu"
 	@FXML
 	void getRec() {
 		
